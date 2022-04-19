@@ -1,81 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/habit_item_rl"
+        >
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/habit_item_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="11dp"
             android:text="Habits 1"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="0dp"
+             />
 
         <LinearLayout
+            android:id="@+id/habit_item_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/habit_item_bttn"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button"
-            app:layout_constraintHorizontal_bias="0.95"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintEnd_toStartOf="@+id/habit_item_bttn">
 
             <TextView
+                android:id="@+id/habit_item_threedayago"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10.03"
-                android:layout_marginRight="10dp"
-                android:background="#7CFC00"/>
+                android:layout_marginEnd="10dp"
+                android:background="@color/limegreen"
+                android:text="10.03" />
 
             <TextView
+                android:id="@+id/habit_item_twodayago"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="11.03"
-                android:layout_marginRight="10dp"
-                android:background="#7CFC00"
-                />
+                android:layout_marginEnd="10dp"
+                android:background="@color/limegreen"
+                android:text="11.03" />
 
             <TextView
+                android:id="@+id/habit_item_yesterday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="12.03"
-                android:background="#FF0000"/>
+                android:layout_marginEnd="10dp"
+                android:background="@color/red"
+                android:text="12.03" />
 
 
         </LinearLayout>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/habit_item_bttn"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_marginEnd="2dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp"
             android:text="today"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-</LinearLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
