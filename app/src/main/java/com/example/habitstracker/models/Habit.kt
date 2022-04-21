@@ -1,8 +1,14 @@
 package com.example.habitstracker.models
 
-import java.util.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 
 
-class Habit(var name: String, val dates: List<Date>) {
+@Entity(tableName = "habits", indices = [Index(value = arrayOf("name"), unique = true)])
+class Habit(@PrimaryKey(autoGenerate = true) val id_habit: Long? = null,
+            @ColumnInfo(name = "name") var name: String,
+            ) {
 
 }
