@@ -1,31 +1,32 @@
 package com.example.habitstracker.fragments
 
-import android.database.ContentObserver
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habitstracker.R
 import com.example.habitstracker.adapters.HabitsAdapter
+import com.example.habitstracker.adapters.SwipeToDeleteCallback
 import com.example.habitstracker.databinding.MainFragmentBinding
+import com.example.habitstracker.models.DateWhenCompleted
+import com.example.habitstracker.models.Habit
 import com.example.habitstracker.models.HabitWDate
 import com.example.habitstracker.viewmodels.MainViewModel
-import kotlinx.android.synthetic.main.main_fragment.*
 
 
 class MainFragment : Fragment() {
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private var habitsRecyclerView: RecyclerView? = null
-    var hadapter: HabitsAdapter? = null
+    private var recyclerView: RecyclerView? = null
+    var adapter: HabitsAdapter? = null
 
     private lateinit var viewModel: MainViewModel
 
@@ -56,18 +57,35 @@ class MainFragment : Fragment() {
     }
     private fun observeData(){
         viewModel.habitsList.observeForever {
-            Log.d("dLog", "size list in observer: " + it.size)
-            hadapter = HabitsAdapter(it, onClick = { onClick() })
-            habitsRecyclerView?.adapter = hadapter
+            initAdapter(it as MutableList<HabitWDate>)
         }
+    }
+    private fun initAdapter(list: MutableList<HabitWDate>){
+        adapter = HabitsAdapter(list,
+            onCheckButton = {habit: Habit -> viewModel.checkDate(habit)},
+            insertToday = {habit: Habit ->viewModel.insertTodayDate(habit)},
+            deleteToday = {dateWhenCompleted: DateWhenCompleted ->  viewModel.deleteTodayDate(dateWhenCompleted)})
+        recyclerView?.adapter = adapter
+        val swipeToDeleteCallback = object : SwipeToDeleteCallback() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val pos = viewHolder.adapterPosition
+                Log.d("dLog","Trying to delete "+ list[pos].habit.name)
+                viewModel.deleteHabit(list[pos].habit)
+                adapter!!.notifyItemRemoved(pos)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
     fun onClick(){
         findNavController().navigate(R.id.blankFragment)
     }
 
     private fun initRecyclerView() {
-        habitsRecyclerView = binding.recyclerView
-        habitsRecyclerView!!.layoutManager = LinearLayoutManager(context)
-        Log.d("dLog", "initRecyclerView ")
+        recyclerView = binding.recyclerView
+        recyclerView?.apply {
+            layoutManager = LinearLayoutManager(context)
+            //addItemDecoration(SimpleDividerItemDecoration(this))
+        }
     }
 }

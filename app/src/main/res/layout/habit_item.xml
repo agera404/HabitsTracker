@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/habit_item_rl"
+        android:padding="7dp"
         >
 
         <TextView
@@ -30,41 +31,44 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toStartOf="@+id/habit_item_bttn">
 
-            <TextView
+            <ImageView
                 android:id="@+id/habit_item_threedayago"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:background="@color/limegreen"
-                android:text="10.03" />
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/ic_baseline_close_24"
+                />
 
-            <TextView
+            <ImageView
                 android:id="@+id/habit_item_twodayago"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:background="@color/limegreen"
-                android:text="11.03" />
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/ic_baseline_close_24"
+                 />
 
-            <TextView
+            <ImageView
                 android:id="@+id/habit_item_yesterday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:background="@color/red"
-                android:text="12.03" />
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/ic_baseline_close_24"
+                 />
 
 
         </LinearLayout>
 
-        <Button
+        <ImageButton
             android:id="@+id/habit_item_bttn"
-            android:layout_width="100dp"
+            android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="0dp"
-            android:text="today"
-            android:textSize="15sp" />
+
+            android:textSize="15sp"
+            android:tag="imageButton"
+
+            />
 
 
     </RelativeLayout>

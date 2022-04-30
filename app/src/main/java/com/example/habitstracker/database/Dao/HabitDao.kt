@@ -14,4 +14,7 @@ interface HabitDao {
     @Delete
     abstract fun Delete(habit: Habit)
 
+    @Query("SELECT * FROM habits WHERE id_habit in(:id)")
+    abstract fun FindHabitById(id: Long): Habit?
+
 }

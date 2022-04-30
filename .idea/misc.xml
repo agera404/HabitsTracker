@@ -3,9 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/NextCloud/Projects/HabitsTracker2/app/src/main/res/layout/activity_main.xml" value="0.20199275362318841" />
+        <entry key="..\:/NextCloud/Projects/HabitsTracker2/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/NextCloud/Projects/HabitsTracker2/app/src/main/res/layout/create_new_habit_dialog_fragment.xml" value="0.22" />
         <entry key="..\:/NextCloud/Projects/HabitsTracker2/app/src/main/res/layout/habit_item.xml" value="0.22" />
         <entry key="..\:/NextCloud/Projects/HabitsTracker2/app/src/main/res/layout/main_fragment.xml" value="0.25" />
+        <entry key="..\:/NextCloud/Projects/HabitsTracker2/app/src/main/res/layout/toolbar.xml" value="0.18" />
       </map>
     </option>
   </component>

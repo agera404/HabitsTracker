@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DateDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun Insert(date: DateWhenCompleted)
 
     @Update
@@ -16,6 +16,8 @@ interface DateDao {
 
     @Delete
     abstract fun Delete(date: DateWhenCompleted)
+
+
 
     @Transaction
     @Query("SELECT * FROM habits")
