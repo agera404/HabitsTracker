@@ -10,13 +10,13 @@ import java.util.*
     foreignKeys = arrayOf(ForeignKey
         (entity = Habit::class,
         parentColumns = arrayOf("id_habit"),
-        childColumns = arrayOf("habit"),
+        childColumns = arrayOf("id_habit"),
         onDelete = CASCADE)),
-        indices = [Index(value = arrayOf("date","habit"), unique = true)])
+        indices = [Index(value = arrayOf("date","id_habit"), unique = true)])
 class DateWhenCompleted(
     @PrimaryKey var id_date: Long? = null,
     @ColumnInfo(name = "date") @TypeConverters(DateConverter::class) var date: Date,
-    @ColumnInfo(name = "habit") var habit: Long
+    @ColumnInfo(name = "id_habit") var id_habit: Long
 ) {
 }
 
@@ -30,5 +30,8 @@ object DateConverter{
     @JvmStatic
     fun stringToDate(string: String): Date?{
         return SimpleDateFormat("dd/M/yyyy").parse(string)
+    }
+    fun convertDateToLong(date:Date): Long{
+        return Calendar.getInstance().apply { time = date }.timeInMillis
     }
 }

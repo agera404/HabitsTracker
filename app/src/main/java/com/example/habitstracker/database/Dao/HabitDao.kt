@@ -6,15 +6,15 @@ import com.example.habitstracker.models.Habit
 @Dao
 interface HabitDao {
     @Insert
-    suspend fun Insert(habit: Habit): Long
+    suspend fun insert(habit: Habit): Long
 
     @Update
-    abstract suspend fun Update(habit: Habit)
+    abstract suspend fun update(habit: Habit)
 
     @Delete
-    abstract fun Delete(habit: Habit)
+    abstract fun delete(habit: Habit)
 
     @Query("SELECT * FROM habits WHERE id_habit in(:id)")
-    abstract fun FindHabitById(id: Long): Habit?
+    abstract fun findHabitById(id: Long): Habit?
 
 }

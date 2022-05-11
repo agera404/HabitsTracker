@@ -9,14 +9,16 @@ import com.example.habitstracker.models.DateWhenCompleted
 import com.example.habitstracker.models.Habit
 import com.example.habitstracker.models.HabitWDate
 
+
 class HabitsAdapter(private val dataSet: List<HabitWDate>,
                     val onCheckButton:(Habit)->Boolean,
                     val insertToday:(Habit)->Unit,
-                    val deleteToday:(DateWhenCompleted)->Unit) : RecyclerView.Adapter<ViewHolder>() {
+                    val removeToday:(DateWhenCompleted)->Unit,
+                    val onItemClicked:(habitWDate: HabitWDate)->Unit) : RecyclerView.Adapter<ViewHolder>() {
 
     private var habitsSet: List<HabitWDate> = listOf()
         get() {
-            if (field.isNotEmpty())return field
+            if (field.isNotEmpty()) return field
             return listOf()
         }
         set(value){
@@ -35,9 +37,12 @@ class HabitsAdapter(private val dataSet: List<HabitWDate>,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val habit = habitsSet[position]
-        holder.bind(habit, onCheckButton, insertToday, deleteToday)
-
+        holder.bind(habit, onCheckButton, insertToday, removeToday)
+        holder.itemView.setOnClickListener {
+            onItemClicked(habit)
+        }
     }
+
     override fun getItemCount(): Int {
         return habitsSet.size
     }

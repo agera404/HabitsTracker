@@ -9,7 +9,7 @@ data class HabitWDate(
     @Relation(
         entity = DateWhenCompleted::class,
         parentColumn = "id_habit",
-        entityColumn = "habit"
+        entityColumn = "id_habit"
     )
     var dates: List<DateWhenCompleted>) {
     }
