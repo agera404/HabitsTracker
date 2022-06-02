@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 
 
 @Entity(tableName = "habits", indices = [Index(value = arrayOf("name"), unique = true)])
-class Habit(@PrimaryKey(autoGenerate = true) val id_habit: Long? = null,
-            @ColumnInfo(name = "name") var name: String,
+class HabitEntity(@PrimaryKey(autoGenerate = true) val id_habit: Long? = null,
+                  @ColumnInfo(name = "name") var name: String,
             ) {
 
 }

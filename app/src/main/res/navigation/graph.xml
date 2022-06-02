@@ -10,19 +10,13 @@
         android:name="com.example.habitstracker.fragments.MainFragment"
         android:label="main_fragment"
         tools:layout="@layout/main_fragment" >
-        <action
-            android:id="@+id/action_mainFragment_to_habitFragment"
-            app:destination="@id/habitFragment" />
     </fragment>
     <fragment
         android:id="@+id/habitFragment"
         android:name="com.example.habitstracker.fragments.HabitFragment"
         android:label="habit_fragment"
         tools:layout="@layout/habit_fragment" >
-        <action
-            android:id="@+id/action_habitFragment_self"
-            app:popUpToInclusive="true"
-            app:destination="@id/habitFragment" />
+
     </fragment>
     <dialog
         android:id="@+id/createNewHabitDialogFragment"
@@ -33,12 +27,16 @@
         android:id="@+id/editDatesDialogFragment"
         android:name="com.example.habitstracker.fragments.EditDatesDialogFragment"
         android:label="edit_dates_dialog_fragment"
-        tools:layout="@layout/edit_dates_dialog_fragment" />
+        tools:layout="@layout/edit_dates_dialog_fragment" >
+    </dialog>
     <dialog
         android:id="@+id/datePickerFragment"
         android:name="com.example.habitstracker.fragments.DatePickerFragment"
         android:label="fragment_date_picker"
         tools:layout="@layout/fragment_date_picker" />
-
-
+    <dialog
+        android:id="@+id/timePickerFragment"
+        android:name="com.example.habitstracker.fragments.TimePickerFragment"
+        android:label="fragment_time_picker"
+        tools:layout="@layout/fragment_time_picker" />
 </navigation>

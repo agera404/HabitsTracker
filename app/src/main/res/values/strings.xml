@@ -2,4 +2,8 @@
     <string name="app_name">HabitsTracker</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="notification_array">
+        <item>Daily</item>
+        <item>Custom</item>
+    </string-array>
 </resources>

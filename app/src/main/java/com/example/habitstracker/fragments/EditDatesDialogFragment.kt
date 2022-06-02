@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.habitstracker.EventObserver
@@ -14,14 +16,18 @@ import com.example.habitstracker.MainActivity
 import com.example.habitstracker.R
 import com.example.habitstracker.databinding.EditDatesDialogFragmentBinding
 import com.example.habitstracker.models.DateConverter
+import com.example.habitstracker.viewmodels.ActivityViewModel
 import com.example.habitstracker.viewmodels.EditDatesDialogViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class EditDatesDialogFragment : DialogFragment() {
 
     private var _binding: EditDatesDialogFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: EditDatesDialogViewModel
+    private val viewModel: EditDatesDialogViewModel by viewModels()
+    private  val activityViewModel: ActivityViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,19 +43,13 @@ class EditDatesDialogFragment : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        (activity as MainActivity).viewModel.setEditDateState(false)
     }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(EditDatesDialogViewModel::class.java)
-        viewModel.idHabit = (activity as MainActivity).viewModel.getItem()?.habit?.id_habit!!
-        (activity as MainActivity).viewModel.setEditDateState(true)
+        viewModel.idHabit = activityViewModel.getItemId()!!
+        binding.selectedDate.text = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
+        this.isCancelable = false
         observeDate()
         setOnClickListeners()
     }
@@ -59,11 +59,11 @@ class EditDatesDialogFragment : DialogFragment() {
             findNavController().navigate(it as Int)
         })
 
-        (activity as MainActivity).viewModel.selectedDate.observe(requireActivity(), Observer {
+        activityViewModel.selectedDate.observe(requireActivity(), Observer {
             viewModel.setSelectedDate(it)
         })
         viewModel.selectedDate.observe(viewLifecycleOwner, Observer { date ->
-            binding.selectedDate.text = DateConverter.dateToString(date)
+            binding.selectedDate.text = DateConverter.toString(date)
             setBackgroundForImageButton(viewModel.isDateExist(date, viewModel.idHabit))
         })
     }
@@ -84,5 +84,6 @@ class EditDatesDialogFragment : DialogFragment() {
                 setBackgroundForImageButton(true)
             }
         }
+        binding.backButton.setOnClickListener { findNavController().navigateUp() }
     }
 }

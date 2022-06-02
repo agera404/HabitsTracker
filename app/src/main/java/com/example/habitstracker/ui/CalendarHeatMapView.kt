@@ -6,26 +6,25 @@ import android.util.Log
 import android.view.View
 import android.widget.GridLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.habitstracker.R
 import com.example.habitstracker.models.DateConverter
-import org.w3c.dom.Text
+import java.time.LocalDate
 import java.util.*
 
-class CalendarHeatMapView(context: Context, val minDate: Date, val dateSet: List<Date>) :
+class CalendarHeatMapView(context: Context, val minDate: LocalDate, val dateSet: List<LocalDate>) :
     GridLayout(context) {
     var prams: GridLayout.LayoutParams = LayoutParams()
-    var dates = listOf<Date>()
+    var dates = listOf<LocalDate>()
         get() {
             var startDate = getStartDate()
-            var endDate = Date()
-            var list = mutableListOf<Date>()
-            while (endDate >= startDate) {
+            var endDate = LocalDate.now()
+            var list = mutableListOf<LocalDate>()
+            while (endDate.isAfter(startDate)) {
                 list.add(startDate)
-                startDate = Calendar.getInstance().apply { time = startDate }
-                    .also { it.add(Calendar.HOUR_OF_DAY, 24) }.time
+                startDate = startDate.plusDays(1)
             }
+            list.add(endDate)
             return list
         }
 
@@ -38,7 +37,7 @@ class CalendarHeatMapView(context: Context, val minDate: Date, val dateSet: List
         for (day in dates) {
             var flag = false
             for (date in dateSet) {
-                if (DateConverter.dateToString(day).equals(DateConverter.dateToString(date))) {
+                if (DateConverter.toString(day).equals(DateConverter.toString(date))) {
                     flag = true
                     break
                 } else {
@@ -46,9 +45,9 @@ class CalendarHeatMapView(context: Context, val minDate: Date, val dateSet: List
                 }
             }
             if (flag) {
-                this.addView(createImageView(true, DateConverter.dateToString(day)!!))
+                this.addView(createImageView(true, DateConverter.toString(day)!!))
             } else {
-                this.addView(createImageView(false, DateConverter.dateToString(day)!!))
+                this.addView(createImageView(false, DateConverter.toString(day)!!))
             }
         }
         addDayOfWeek()
@@ -72,15 +71,14 @@ class CalendarHeatMapView(context: Context, val minDate: Date, val dateSet: List
     }
 
 
-    private fun getStartDate(): Date {
-        val calendar = Calendar.getInstance()
-        calendar.time = Date()
-        //calendar.time = minDate
-        calendar.add(Calendar.MONTH, -3)
-        calendar.add(Calendar.DAY_OF_YEAR, 7)
-        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-        calendar.add(Calendar.DAY_OF_YEAR, -(dayOfWeek - 2))
-        return calendar.time
+    private fun getStartDate(): LocalDate {
+
+        val today = LocalDate.now()
+        var startDate = today.minusMonths(3)
+        startDate = startDate.plusDays(7)
+        val _dayOfWeek: Long = (startDate.dayOfWeek.value).toLong()
+        startDate = startDate.minusDays(_dayOfWeek-1)
+        return startDate
     }
 
     private fun setPrams() {
@@ -88,7 +86,7 @@ class CalendarHeatMapView(context: Context, val minDate: Date, val dateSet: List
         prams.height = 300
         this.prams = prams
         this.rowCount = 7
-        this.columnCount = getTotalWeeksInYear(2022)
+        //this.columnCount = getTotalWeeksInYear(2022)
         this.orientation = GridLayout.VERTICAL
     }
 
@@ -101,7 +99,7 @@ class CalendarHeatMapView(context: Context, val minDate: Date, val dateSet: List
         return mCalendar[Calendar.WEEK_OF_YEAR]
     }
 
-    fun createImageView(flag: Boolean, date: String): View {
+    private fun createImageView(flag: Boolean, date: String): View {
         val backgroundParams = object {
             var drawable: Int? = null
             var color: Int? = null

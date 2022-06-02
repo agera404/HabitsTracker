@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.habitstracker.MainActivity
-import com.example.habitstracker.models.DateConverter
+import androidx.fragment.app.activityViewModels
+import com.example.habitstracker.viewmodels.ActivityViewModel
+import java.time.LocalDate
 import java.util.*
 
 class DatePickerFragment :  DialogFragment(), DatePickerDialog.OnDateSetListener {
+
+    private val activityViewModel: ActivityViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val calendar = Calendar.getInstance()
@@ -27,9 +29,10 @@ class DatePickerFragment :  DialogFragment(), DatePickerDialog.OnDateSetListener
     }
 
     override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month, day)
-        (activity as MainActivity).viewModel.setSelectedDate(calendar.time)
+        val date = LocalDate.of(year,month+1,day)
+        activityViewModel.setSelectedDate(date)
+
+
     }
 
 

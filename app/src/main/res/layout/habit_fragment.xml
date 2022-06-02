@@ -18,6 +18,18 @@
                 android:id="@+id/habit_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+            <FrameLayout
+                android:id="@+id/notification_fragment_container"
+                android:layout_below="@id/habit_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <!--<androidx.fragment.app.FragmentContainerView
+                android:layout_below="@id/habit_name"
+                android:id="@+id/fragment_container_view"
+                android:name="com.example.habitstracker.fragments.NotificationSettingsFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />-->
         </RelativeLayout>
         <RelativeLayout
             android:paddingStart="10dp"
@@ -29,14 +41,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:text="Heat Map"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:layout_alignParentLeft="true"
                 android:gravity="center"/>
 
             <ImageButton
                 android:id="@+id/edit_dates_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/ic_baseline_edit_24" />
             <LinearLayout

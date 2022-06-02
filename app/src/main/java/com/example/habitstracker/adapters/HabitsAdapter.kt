@@ -5,29 +5,31 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habitstracker.databinding.HabitItemBinding
-import com.example.habitstracker.models.DateWhenCompleted
-import com.example.habitstracker.models.Habit
+import com.example.habitstracker.models.DateEntity
+import com.example.habitstracker.models.HabitEntity
 import com.example.habitstracker.models.HabitWDate
+import java.time.LocalDate
 
 
 class HabitsAdapter(private val dataSet: List<HabitWDate>,
-                    val onCheckButton:(Habit)->Boolean,
-                    val insertToday:(Habit)->Unit,
-                    val removeToday:(DateWhenCompleted)->Unit,
-                    val onItemClicked:(habitWDate: HabitWDate)->Unit) : RecyclerView.Adapter<ViewHolder>() {
+                    private val isDateExist: (id: Long, date: LocalDate) -> Boolean,
+                    private val insertToday:(HabitEntity)->Unit,
+                    private val removeToday:(DateEntity)->Unit,
+                    private val onItemClicked:(habitWDate: HabitWDate)->Unit,
+                    private val removeHabit:(habit: HabitEntity)->Unit) : RecyclerView.Adapter<ViewHolder>() {
 
-    private var habitsSet: List<HabitWDate> = listOf()
-        get() {
-            if (field.isNotEmpty()) return field
-            return listOf()
-        }
+    private var habitsSet: MutableList<HabitWDate> = mutableListOf()
         set(value){
             field = value
             notifyDataSetChanged()
-
         }
     init {
-        habitsSet = dataSet
+        habitsSet = dataSet as MutableList<HabitWDate>
+    }
+    fun removeAt(index: Int){
+        removeHabit(habitsSet[index].habitEntity)
+        habitsSet.removeAt(index)
+        notifyItemRemoved(index)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -37,7 +39,7 @@ class HabitsAdapter(private val dataSet: List<HabitWDate>,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val habit = habitsSet[position]
-        holder.bind(habit, onCheckButton, insertToday, removeToday)
+        holder.bind(habit, isDateExist, insertToday, removeToday)
         holder.itemView.setOnClickListener {
             onItemClicked(habit)
         }

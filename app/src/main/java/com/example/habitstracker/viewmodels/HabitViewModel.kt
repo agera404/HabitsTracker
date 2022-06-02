@@ -1,56 +1,46 @@
 package com.example.habitstracker.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.habitstracker.Event
 import com.example.habitstracker.R
-import com.example.habitstracker.models.DateConverter
+import com.example.habitstracker.common.Notificator
+import com.example.habitstracker.models.DateEntity
+import com.example.habitstracker.models.HabitEntity
 import com.example.habitstracker.models.HabitWDate
 import com.example.habitstracker.repositories.HabitsRepository
-import kotlinx.coroutines.flow.collect
+import com.example.habitstracker.viewmodels.common.interfaces.INavigationVM
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.util.*
+import java.time.LocalDate
 
-class HabitViewModel : ViewModel() {
+class HabitViewModel : ViewModel(), INavigationVM by NavigationVM() {
     private var _habitWDate: MutableLiveData<HabitWDate> = MutableLiveData<HabitWDate>()
     var habitWDate: LiveData<HabitWDate> = _habitWDate
 
-    private val _navigateEvent = MutableLiveData<Event<Any>>()
-    val navigateEvent: LiveData<Event<Any>> = _navigateEvent
 
-    fun subscribeHabit(){
+    fun setHabitName(name: String) {
+        val updatedHabit =  HabitEntity(habitWDate.value?.habitId!!,name)
         viewModelScope.launch {
-            val id = habitWDate.value?.habit?.id_habit!!
-            HabitsRepository.getHabitWithDates(id).collect(){
-                _habitWDate.value = it
-            }
+            HabitsRepository.updateHabit(updatedHabit)
         }
-    }
-    fun navigateToEditDates(){
-        _navigateEvent.value = Event(R.id.editDatesDialogFragment)
     }
 
-    fun setItem(habitWDate: HabitWDate){
-        _habitWDate.value = habitWDate
+    fun navigateToEditDates() {
+        navToEditDatesDialog()
     }
-    fun getMinDate():Date{
-        var listOfDates = habitWDate.value?.dates?.map { it.date }
-        var minDate: Date = Date()
-        if (listOfDates != null) {
-            for (date in listOfDates){
-                if (minDate.after(date)){
-                    minDate = date
-                }
+
+    fun setItem(id: Long) {
+        val stateIn = HabitsRepository.getHabitWithDates(id).distinctUntilChanged().stateIn(viewModelScope, SharingStarted.WhileSubscribed(10000),null)
+        viewModelScope.launch {
+            stateIn.collect(){
+                _habitWDate.setValue(it)
             }
         }
-        return minDate
     }
-    fun getDates(): List<Date> {
-        var listOfDates = habitWDate.value?.dates?.map { it.date }
-        if (listOfDates != null) return listOfDates
-        return listOf()
-    }
+
+
 }

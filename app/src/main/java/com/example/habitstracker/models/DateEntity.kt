@@ -2,20 +2,19 @@ package com.example.habitstracker.models
 
 import androidx.room.*
 import androidx.room.ForeignKey.Companion.CASCADE
-import java.text.SimpleDateFormat
-
-import java.util.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Entity(
     foreignKeys = arrayOf(ForeignKey
-        (entity = Habit::class,
+        (entity = HabitEntity::class,
         parentColumns = arrayOf("id_habit"),
         childColumns = arrayOf("id_habit"),
         onDelete = CASCADE)),
         indices = [Index(value = arrayOf("date","id_habit"), unique = true)])
-class DateWhenCompleted(
+class DateEntity(
     @PrimaryKey var id_date: Long? = null,
-    @ColumnInfo(name = "date") @TypeConverters(DateConverter::class) var date: Date,
+    @ColumnInfo(name = "date") @TypeConverters(DateConverter::class) var date: LocalDate,
     @ColumnInfo(name = "id_habit") var id_habit: Long
 ) {
 }
@@ -23,15 +22,14 @@ class DateWhenCompleted(
 object DateConverter{
     @TypeConverter
     @JvmStatic
-    fun dateToString(date: Date): String?{
-        return SimpleDateFormat("dd/M/yyyy").format(date)
+    fun toString(date: LocalDate): String?{
+        return DateTimeFormatter.ofPattern("dd/M/yyyy").format(date)
     }
     @TypeConverter
     @JvmStatic
-    fun stringToDate(string: String): Date?{
-        return SimpleDateFormat("dd/M/yyyy").parse(string)
+    fun toDate(string: String): LocalDate?{
+        var formatter = DateTimeFormatter.ofPattern("dd/M/yyyy")
+        return LocalDate.parse(string,formatter)
     }
-    fun convertDateToLong(date:Date): Long{
-        return Calendar.getInstance().apply { time = date }.timeInMillis
-    }
+
 }

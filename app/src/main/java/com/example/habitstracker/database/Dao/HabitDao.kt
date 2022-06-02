@@ -1,20 +1,20 @@
 package com.example.habitstracker.database.Dao
 
 import androidx.room.*
-import com.example.habitstracker.models.Habit
+import com.example.habitstracker.models.HabitEntity
 
 @Dao
 interface HabitDao {
     @Insert
-    suspend fun insert(habit: Habit): Long
+    suspend fun insert(habitEntity: HabitEntity): Long
 
     @Update
-    abstract suspend fun update(habit: Habit)
+    suspend fun update(habitEntity: HabitEntity)
 
     @Delete
-    abstract fun delete(habit: Habit)
+    fun delete(habitEntity: HabitEntity)
 
     @Query("SELECT * FROM habits WHERE id_habit in(:id)")
-    abstract fun findHabitById(id: Long): Habit?
+    fun findHabitById(id: Long): HabitEntity?
 
 }

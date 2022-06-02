@@ -1,6 +1,5 @@
 package com.example.habitstracker.adapters
 
-import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -8,61 +7,56 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.habitstracker.R
 import com.example.habitstracker.databinding.HabitItemBinding
 import com.example.habitstracker.models.DateConverter
-import com.example.habitstracker.models.DateWhenCompleted
-import com.example.habitstracker.models.Habit
+import com.example.habitstracker.models.DateEntity
+import com.example.habitstracker.models.HabitEntity
 import com.example.habitstracker.models.HabitWDate
-import java.util.*
+import java.time.LocalDate
 
 class ViewHolder(private val _binding: HabitItemBinding) : RecyclerView.ViewHolder(_binding.root) {
 
     fun bind(
-        item: HabitWDate, onCheckButton: (Habit) -> Boolean,
-        insertToday: (Habit) -> Unit,
-        removeToday: (DateWhenCompleted) -> Unit
+        item: HabitWDate, isDateExist: (id: Long, date: LocalDate) -> Boolean,
+        insertToday: (HabitEntity) -> Unit,
+        removeToday: (DateEntity) -> Unit
     ) {
-        _binding.habitItemTextView.text = item.habit.name
+        _binding.habitItemTextView.text = item.habitName
 
-        setBackgroundForImageButton(onCheckButton(item.habit), _binding.habitItemBttn)
-        _binding.habitItemBttn.setOnClickListener { view ->
-            onClickImageButton(view, item, onCheckButton, insertToday, removeToday)
-        }
-
-        val listOfImageView: List<Pair<Int, ImageView>> = listOf(
-            Pair(1, _binding.habitItemYesterday),
-            Pair(2, _binding.habitItemTwodayago),
-            Pair(3, _binding.habitItemThreedayago)
+        setBackgroundForImageButton(
+            isDateExist(item.habitId!!, LocalDate.now()),
+            _binding.habitItemBttn
         )
-        for (pair in listOfImageView) {
-            isDateExist(getDaysAgo(pair.first), item.dates).also { flag ->
-                setBackgroundForImageView(pair.second, flag)
-            }
-            Log.d(
-                "dLog",
-                "days ago: " + getDaysAgo(pair.first) + " is " + isDateExist(
-                    getDaysAgo(pair.first),
-                    item.dates
-                )
-            )
+        _binding.habitItemBttn.setOnClickListener { view ->
+            onClickImageButton(view, item, isDateExist, insertToday, removeToday)
         }
 
-
+        val listOfImageView: List<ImageView> = listOf(
+            _binding.habitItemYesterday,
+            _binding.habitItemTwodayago,
+            _binding.habitItemThreedayago
+        )
+        listOfImageView.forEachIndexed { index, imageView ->
+            if(item.getDateEntityByDate(getDaysAgo((index+1).toLong())) != null){
+                setBackgroundForImageView(imageView, true)
+            }else{
+                setBackgroundForImageView(imageView, false)
+            }
+        }
     }
 
     private fun onClickImageButton(
         view: View,
         item: HabitWDate,
-        onCheckButton: (Habit) -> Boolean,
-        insertToday: (Habit) -> Unit,
-        deleteToday: (DateWhenCompleted) -> Unit
+        isDateExist: (id: Long, date: LocalDate) -> Boolean,
+        insertToday: (HabitEntity) -> Unit,
+        deleteToday: (DateEntity) -> Unit
     ) {
-        view.setTag("" + item.habit.id_habit)
-        if (!onCheckButton(item.habit)) {
-            insertToday(item.habit)
+        view.setTag("" + item.habitEntity.id_habit)
+        if (!isDateExist(item.habitId!!, LocalDate.now())) {
+            insertToday(item.habitEntity)
         } else {
-            val dates = item.dates.filter {
-                DateConverter.dateToString(it.date) == DateConverter.dateToString(Date())
-            }.filter { it.id_habit == item.habit.id_habit }
-            val date = dates.first()
+            val date = item.datesEntities.first {
+                DateConverter.toString(it.date) == DateConverter.toString(LocalDate.now())
+            }
             deleteToday(date)
         }
     }
@@ -74,9 +68,6 @@ class ViewHolder(private val _binding: HabitItemBinding) : RecyclerView.ViewHold
 
     }
 
-    private fun isDateExist(day: Date, dates: List<DateWhenCompleted>): Boolean {
-        return dates.stream().anyMatch { DateConverter.dateToString(it.date) == DateConverter.dateToString(day) }
-    }
 
     private fun setBackgroundForImageView(view: ImageView, flag: Boolean) {
         val drawable_id =
@@ -85,9 +76,8 @@ class ViewHolder(private val _binding: HabitItemBinding) : RecyclerView.ViewHold
         //view.setBackgroundColor(this.itemView.resources.getColor(R.color.md_theme_light_background))
     }
 
-    private fun getDaysAgo(daysAgo: Int): Date {
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.DAY_OF_YEAR, -daysAgo)
-        return calendar.time
+    private fun getDaysAgo(daysAgo: Long): LocalDate {
+        val today = LocalDate.now()
+        return today.minusDays(daysAgo)
     }
 }

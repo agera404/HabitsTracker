@@ -1,51 +1,57 @@
 package com.example.habitstracker.viewmodels
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.habitstracker.Event
-import com.example.habitstracker.R
-import com.example.habitstracker.models.HabitWDate
-import java.util.*
+import com.example.habitstracker.database.AppDatabase
+import com.example.habitstracker.repositories.HabitsRepository
+import com.example.habitstracker.viewmodels.common.interfaces.INavigationVM
+import java.time.LocalDate
+import java.time.LocalTime
 
 
-class ActivityViewModel: ViewModel() {
-    private val _editDateState: MutableLiveData<Boolean?> = MutableLiveData<Boolean?>(false)
-    val editDateState: LiveData<Boolean?> = _editDateState
+class ActivityViewModel(application: Application) : AndroidViewModel(application), INavigationVM by NavigationVM() {
 
-    fun getEditDateState(): Boolean? {
-        return _editDateState.value
-    }
-    fun setEditDateState(boolean: Boolean?){
-        _editDateState.value = boolean
+    private val context = application.applicationContext
+    init {
+        HabitsRepository.db = AppDatabase.getInstance(context)
     }
 
-    private var _selectedDate: MutableLiveData<Date> = MutableLiveData<Date>()
-    val selectedDate: LiveData<Date> = _selectedDate
 
-    fun getSelectedDate(): Date?{
+    private var _selectedTime: MutableLiveData<LocalTime> = MutableLiveData<LocalTime>()
+    val selectedTime: LiveData<LocalTime> = _selectedTime
+
+    fun getSelectedTime(): LocalTime?{
+        return  _selectedTime.value
+    }
+    fun setSelectedTime(time: LocalTime){
+        _selectedTime.value = time
+    }
+
+    private var _selectedDate: MutableLiveData<LocalDate> = MutableLiveData<LocalDate>()
+    val selectedDate: LiveData<LocalDate> = _selectedDate
+
+    fun getSelectedDate(): LocalDate?{
         return  _selectedDate.value
     }
-    fun setSelectedDate(date: Date){
+    fun setSelectedDate(date: LocalDate){
         _selectedDate.value = date
     }
 
-    var _item: MutableLiveData<HabitWDate> = MutableLiveData<HabitWDate>()
-    val item: LiveData<HabitWDate> = _item
+    var _itemId: MutableLiveData<Long> = MutableLiveData<Long>()
+    val itemId: LiveData<Long> = _itemId
 
-    fun getItem(): HabitWDate? {
-        return _item.getValue()
+    fun getItemId(): Long? {
+        return _itemId.getValue()
     }
 
-    fun setItem(item: HabitWDate) {
-        this._item.setValue(item)
+    fun setItemId(id: Long) {
+        this._itemId.setValue(id)
     }
-
-    private val _navigateEvent = MutableLiveData<Event<Any>>()
-    val navigateEvent: LiveData<Event<Any>> = _navigateEvent
 
     fun navigateToCreateNewHabit(){
-        _navigateEvent.value = Event(R.id.createNewHabitDialogFragment)
+       this.navToCreateNewHabitDialog()
     }
 
 }

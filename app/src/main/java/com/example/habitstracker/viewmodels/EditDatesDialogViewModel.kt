@@ -6,42 +6,42 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.habitstracker.Event
 import com.example.habitstracker.R
-import com.example.habitstracker.models.DateWhenCompleted
+import com.example.habitstracker.models.DateEntity
 import com.example.habitstracker.repositories.HabitsRepository
+import com.example.habitstracker.viewmodels.common.interfaces.INavigationVM
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.util.*
 
-class EditDatesDialogViewModel : ViewModel() {
-    private val _navigateEvent = MutableLiveData<Event<Any>>()
-    val navigateEvent: LiveData<Event<Any>> = _navigateEvent
+class EditDatesDialogViewModel : ViewModel(), INavigationVM by NavigationVM() {
 
-    private val _selectedDate: MutableLiveData<Date> = MutableLiveData()
-    val selectedDate: LiveData<Date> = _selectedDate
+    private val _selectedDate: MutableLiveData<LocalDate> = MutableLiveData()
+    val selectedDate: LiveData<LocalDate> = _selectedDate
 
     var idHabit: Long = 0
 
     init {
-        _selectedDate.value = Date()
+        _selectedDate.value = LocalDate.now()
     }
-    fun setSelectedDate(date: Date){
+    fun setSelectedDate(date: LocalDate){
         _selectedDate.value = date
     }
 
     fun navigateToDatePicker(){
-        _navigateEvent.value = Event(R.id.datePickerFragment)
+       navToDatePicker()
     }
-    fun isDateExist(date: Date, idHabit: Long):Boolean{
+    fun isDateExist(date: LocalDate, idHabit: Long):Boolean{
         return HabitsRepository.isDateExist(date, idHabit)
     }
-    fun insertDate(idHabit: Long, date: Date){
+    fun insertDate(idHabit: Long, date: LocalDate){
         viewModelScope.launch {
             HabitsRepository.insertDate(idHabit, date)
         }
     }
-    fun removeDate(idHabit: Long, date: Date){
+    fun removeDate(idHabit: Long, date: LocalDate){
         var id = HabitsRepository.findDate(date,idHabit)
         if (id != null){
-            HabitsRepository.removeDate(DateWhenCompleted(id,date,idHabit))
+            HabitsRepository.removeDate(DateEntity(id,date,idHabit))
         }
 
     }
