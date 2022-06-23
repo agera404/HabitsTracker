@@ -16,7 +16,7 @@ class HabitsAdapter(private val dataSet: List<HabitWDate>,
                     private val insertToday:(HabitEntity)->Unit,
                     private val removeToday:(DateEntity)->Unit,
                     private val onItemClicked:(habitWDate: HabitWDate)->Unit,
-                    private val removeHabit:(habit: HabitEntity)->Unit) : RecyclerView.Adapter<ViewHolder>() {
+                    private val removeHabit:(habit: HabitEntity)->Unit) : RecyclerView.Adapter<HabitViewHolder>() {
 
     private var habitsSet: MutableList<HabitWDate> = mutableListOf()
         set(value){
@@ -32,12 +32,12 @@ class HabitsAdapter(private val dataSet: List<HabitWDate>,
         notifyItemRemoved(index)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitViewHolder {
         val _binding = HabitItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(_binding)
+        return HabitViewHolder(_binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {
         val habit = habitsSet[position]
         holder.bind(habit, isDateExist, insertToday, removeToday)
         holder.itemView.setOnClickListener {

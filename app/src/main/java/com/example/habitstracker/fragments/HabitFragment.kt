@@ -1,8 +1,12 @@
 package com.example.habitstracker.fragments
 
+import android.content.Context
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +19,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.habitstracker.EventObserver
 import com.example.habitstracker.R
+import com.example.habitstracker.common.LocalCalendarUtility
 import com.example.habitstracker.databinding.HabitFragmentBinding
 import com.example.habitstracker.ui.CalendarHeatMapView
 import com.example.habitstracker.viewmodels.ActivityViewModel
@@ -49,6 +54,12 @@ class HabitFragment : Fragment() {
         setDatesMap()
         setOnClickListeners()
         addTextChangedListeners()
+        attachNotificationFragment()
+    }
+
+
+
+    private fun attachNotificationFragment(){
         val notificationFragment = NotificationSettingsFragment()
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.notification_fragment_container, notificationFragment).commit()
@@ -88,8 +99,8 @@ class HabitFragment : Fragment() {
 
     private fun setOnClickListeners() {
         binding.editDatesButton.setOnClickListener { viewModel.navigateToEditDates() }
+        binding.addToCalendarButton.setOnClickListener { viewModel.navigateToShowLocalCalendars() }
     }
-
 
     private fun observeData() {
         viewModel.navigateEvent.observe(viewLifecycleOwner, EventObserver {
@@ -105,6 +116,12 @@ class HabitFragment : Fragment() {
                         setSelection(it.habitName.length)
                     }
                 }
+                binding.addToCalendarButton.text = it.habitEntity.calendar_id?.let { id ->
+                    LocalCalendarUtility(requireContext().applicationContext).getLocalCalendarById(
+                        id
+                    )?.name
+                }
+                    ?: "Don't add to calendar"
             }
         })
     }

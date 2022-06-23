@@ -5,14 +5,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
-import com.example.habitstracker.R
-import java.time.LocalDate
-import java.time.LocalDateTime
+import com.example.habitstracker.models.NotificationData
 import java.time.ZoneId
-import java.time.ZoneOffset
-import java.util.*
 
 interface INotificator {
     fun createNotification()

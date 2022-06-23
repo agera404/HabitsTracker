@@ -45,11 +45,14 @@ class CreateNewHabitDialogFragment : DialogFragment() {
         this.isCancelable = false
         binding.saveButton.setOnClickListener { saveOnClickButton() }
         binding.backButton.setOnClickListener { backOnClickButton() }
+        attachNotificationFragment()
+    }
+
+    private fun attachNotificationFragment(){
         val notificationFragment = NotificationSettingsFragment()
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.notification_fragment_container_2, notificationFragment).commit()
     }
-
     private fun saveOnClickButton(){
         val name: String? = binding.nameEdittext.text.toString()
         if (name != null){

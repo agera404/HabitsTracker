@@ -1,4 +1,4 @@
-package com.example.habitstracker.common
+package com.example.habitstracker.models
 
 import android.os.Parcel
 import android.os.Parcelable

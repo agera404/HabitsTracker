@@ -23,7 +23,7 @@ class HabitViewModel : ViewModel(), INavigationVM by NavigationVM() {
 
 
     fun setHabitName(name: String) {
-        val updatedHabit =  HabitEntity(habitWDate.value?.habitId!!,name)
+        val updatedHabit =  HabitEntity(habitWDate.value?.habitId!!,name, habitWDate.value?.habitEntity!!.calendar_id)
         viewModelScope.launch {
             HabitsRepository.updateHabit(updatedHabit)
         }
@@ -31,6 +31,9 @@ class HabitViewModel : ViewModel(), INavigationVM by NavigationVM() {
 
     fun navigateToEditDates() {
         navToEditDatesDialog()
+    }
+    fun navigateToShowLocalCalendars(){
+        navToShowLocalCalendars()
     }
 
     fun setItem(id: Long) {

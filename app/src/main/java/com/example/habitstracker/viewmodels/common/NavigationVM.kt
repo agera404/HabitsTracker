@@ -35,4 +35,8 @@ class NavigationVM : INavigationVM {
     override fun navToTimePickerDialog() {
         navigateEvent.value = Event(NavDestinationID.TIME_PICKER_FRAGMENT.destinationID)
     }
+
+    override fun navToShowLocalCalendars() {
+        navigateEvent.value = Event(NavDestinationID.SHOW_LOCAL_CALENDARS_DIALOG_FRAGMENT.destinationID)
+    }
 }

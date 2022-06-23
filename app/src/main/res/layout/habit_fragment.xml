@@ -22,14 +22,26 @@
                 android:id="@+id/notification_fragment_container"
                 android:layout_below="@id/habit_name"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <!--<androidx.fragment.app.FragmentContainerView
-                android:layout_below="@id/habit_name"
-                android:id="@+id/fragment_container_view"
-                android:name="com.example.habitstracker.fragments.NotificationSettingsFragment"
+                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_below="@id/notification_fragment_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />-->
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/ic_baseline_calendar_month_24"/>
+                <Button
+                    android:id="@+id/add_to_calendar_button"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Don't add to calendar"
+                    android:background="@null"
+                    android:textAlignment="textStart"/>
+            </LinearLayout>
         </RelativeLayout>
         <RelativeLayout
             android:paddingStart="10dp"

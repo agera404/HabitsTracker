@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "habits", indices = [Index(value = arrayOf("name"), unique = true)])
 class HabitEntity(@PrimaryKey(autoGenerate = true) val id_habit: Long? = null,
                   @ColumnInfo(name = "name") var name: String,
+                  @ColumnInfo(name = "calendar_id") var calendar_id: Int? = null
             ) {
 
 }

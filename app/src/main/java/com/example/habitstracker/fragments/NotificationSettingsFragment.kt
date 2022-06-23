@@ -1,5 +1,6 @@
 package com.example.habitstracker.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,15 +13,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.habitstracker.EventObserver
 import com.example.habitstracker.R
-import com.example.habitstracker.common.NotificationData
 import com.example.habitstracker.common.Notificator
 import com.example.habitstracker.databinding.NotificationSettingsFragmentBinding
+import com.example.habitstracker.models.NotificationData
 import com.example.habitstracker.viewmodels.ActivityViewModel
 import com.example.habitstracker.viewmodels.NotificationSettingsViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -53,11 +53,22 @@ class NotificationSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initSpinner()
         setListeners()
         setInfo()
         observeDate()
+    }
+
+    private var fragmentContext: Context? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        fragmentContext = context
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        fragmentContext = null
     }
 
     private fun setInfo() {
@@ -83,9 +94,9 @@ class NotificationSettingsFragment : Fragment() {
     private fun setNotification(date: LocalDateTime) {
         val id = getItemId()
         val habitEntity = viewModel.getItem(id!!)
-        if (habitEntity != null) {
+        if (habitEntity != null && fragmentContext != null) {
             Notificator(
-                requireContext().applicationContext, NotificationData(
+                fragmentContext!!, NotificationData(
                     id.toInt(),
                     habitEntity.name,
                     "Hey! Have you done your habit?",
@@ -102,12 +113,9 @@ class NotificationSettingsFragment : Fragment() {
         activityViewModel.selectedTime.observe(requireActivity(), Observer { _time ->
             binding.selectedTime.text =
                 _time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
-            //viewModel.insertOrUpdate(activityViewModel.getItemId()!!, _time)
             if (_time.isAfter(LocalTime.now())) {
-                //setNotification(_time.atDate(LocalDate.now()))
                 time = _time.atDate(LocalDate.now())
             } else {
-                //setNotification(_time.atDate(LocalDate.now().plusDays(1)))
                 time = _time.atDate(LocalDate.now().plusDays(1))
             }
         }
@@ -123,7 +131,6 @@ class NotificationSettingsFragment : Fragment() {
 
     private fun setListeners() {
         binding.selectTimeButton.setOnClickListener {
-            //viewModel.navigateToTimePicker()
             val timePickerFragment = TimePickerFragment()
             timePickerFragment.show(parentFragmentManager,"timePicker")
         }
@@ -138,10 +145,12 @@ class NotificationSettingsFragment : Fragment() {
             } else {
                 binding.spinner.visibility = View.GONE
                 binding.selectTimeLl.visibility = View.GONE
-                viewModel.removeNotificationInfo(activityViewModel.getItemId()!!)
-                Notificator(requireContext().applicationContext).removeNotification(
-                    activityViewModel.getItemId()!!
-                )
+                if (activityViewModel.getItemId() != null && fragmentContext != null){
+                    viewModel.removeNotificationInfo(activityViewModel.getItemId()!!)
+                    Notificator(fragmentContext!!).removeNotification(
+                        activityViewModel.getItemId()!!
+                    )
+                }
             }
         }
     }

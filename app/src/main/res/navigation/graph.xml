@@ -39,4 +39,9 @@
         android:name="com.example.habitstracker.fragments.TimePickerFragment"
         android:label="fragment_time_picker"
         tools:layout="@layout/fragment_time_picker" />
+    <dialog
+        android:id="@+id/showLocalCalendarDialogFragment"
+        android:name="com.example.habitstracker.fragments.ShowLocalCalendarDialogFragment"
+        android:label="fragment_show_local_calendar_dialog"
+        tools:layout="@layout/fragment_show_local_calendar_dialog" />
 </navigation>

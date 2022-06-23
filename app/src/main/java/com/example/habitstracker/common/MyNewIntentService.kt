@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import com.example.habitstracker.MainActivity
+import com.example.habitstracker.models.NotificationData
 
 
 class MyNewIntentService : IntentService("MyNewIntentService") {

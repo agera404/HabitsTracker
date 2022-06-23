@@ -12,7 +12,7 @@ import com.example.habitstracker.models.HabitEntity
 import com.example.habitstracker.models.HabitWDate
 import java.time.LocalDate
 
-class ViewHolder(private val _binding: HabitItemBinding) : RecyclerView.ViewHolder(_binding.root) {
+class HabitViewHolder(private val _binding: HabitItemBinding) : RecyclerView.ViewHolder(_binding.root) {
 
     fun bind(
         item: HabitWDate, isDateExist: (id: Long, date: LocalDate) -> Boolean,

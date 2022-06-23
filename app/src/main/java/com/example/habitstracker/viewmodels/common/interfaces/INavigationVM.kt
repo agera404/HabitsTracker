@@ -12,4 +12,5 @@ interface INavigationVM{
     fun navToEditDatesDialog()
     fun navToDatePicker()
     fun navToTimePickerDialog()
+    fun navToShowLocalCalendars()
 }
