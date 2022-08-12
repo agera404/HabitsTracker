@@ -1,5 +1,6 @@
 package com.example.habitstracker.fragments
 
+import android.Manifest
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
@@ -11,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
@@ -55,6 +57,7 @@ class HabitFragment : Fragment() {
         setOnClickListeners()
         addTextChangedListeners()
         attachNotificationFragment()
+
     }
 
 
@@ -102,6 +105,16 @@ class HabitFragment : Fragment() {
         binding.addToCalendarButton.setOnClickListener { viewModel.navigateToShowLocalCalendars() }
     }
 
+    val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                viewModel.writeToCalendar(requireContext().applicationContext)
+            } else {
+                // Объяснить как дать permission через настройки
+            }
+        }
     private fun observeData() {
         viewModel.navigateEvent.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigate(it as Int)
@@ -122,6 +135,8 @@ class HabitFragment : Fragment() {
                     )?.name
                 }
                     ?: "Don't add to calendar"
+                requestPermissionLauncher.launch(Manifest.permission.WRITE_CALENDAR)
+
             }
         })
     }

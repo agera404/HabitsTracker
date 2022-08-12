@@ -56,7 +56,6 @@ class NotificationSettingsFragment : Fragment() {
         initSpinner()
         setListeners()
         setInfo()
-        observeDate()
     }
 
     private var fragmentContext: Context? = null
@@ -138,6 +137,7 @@ class NotificationSettingsFragment : Fragment() {
             if (compoundButton.isChecked) {
                 binding.spinner.visibility = View.VISIBLE
                 binding.selectTimeLl.visibility = View.VISIBLE
+                observeDate()
                 if (binding.selectedTime.text.isNullOrEmpty()) {
                     binding.selectedTime.text =
                         LocalTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))

@@ -60,5 +60,7 @@ object HabitsRepository {
     }
     suspend fun insertNotification(entity: NotificationEntity) = db.notificationDao().insert(entity)
     suspend fun updateNotification(entity: NotificationEntity) = db.notificationDao().update(entity)
+    suspend fun insertEvent(entity: EventEntity) = db.eventDao().insert(entity)
+    fun removeEvent(entity: EventEntity) = db.eventDao().delete(entity)
 
 }

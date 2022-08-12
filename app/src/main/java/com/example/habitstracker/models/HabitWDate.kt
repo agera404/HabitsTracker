@@ -22,6 +22,10 @@ data class HabitWDate(
     get() {
         return habitEntity.name
     }
+    val calendarId: Int?
+    get() {
+        return habitEntity.calendar_id
+    }
 
     val datesEntities: List<DateEntity>
     get() {
