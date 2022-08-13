@@ -17,7 +17,7 @@ class Notificator(val context: Context, val info: NotificationData? = null) : IN
 
     override fun createNotification() {
         Log.d("dLog", "creating notify for ${info!!.title} at ${info!!.date}")
-        val notifyIntent = Intent(context, MyReceiver::class.java)
+        val notifyIntent = Intent(context, NotificationReceiver::class.java)
         val bundle = Bundle()
         bundle.putParcelable("Notification_Info", info)
         notifyIntent.putExtra(
@@ -41,7 +41,7 @@ class Notificator(val context: Context, val info: NotificationData? = null) : IN
     }
 
     fun removeNotification(id: Long) {
-        val notifyIntent = Intent(context, MyReceiver::class.java)
+        val notifyIntent = Intent(context, NotificationReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             id.toInt(),

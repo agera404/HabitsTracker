@@ -13,7 +13,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/localCalendar_name"
             android:layout_alignParentLeft="true"
-            android:text="Index"
             android:textSize="20sp"/>
 
     </RelativeLayout>

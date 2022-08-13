@@ -9,11 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <CheckBox
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="set notification"/>
+            android:buttonTint="@color/colorPrimary"
+            android:text="@string/set_notify_checkbox" />
         <Spinner
             android:visibility="gone"
             android:id="@+id/spinner"
@@ -21,7 +23,7 @@
             android:layout_height="wrap_content"/>
         <RelativeLayout
             android:padding="5dp"
-            android:visibility="gone"
+
             android:id="@+id/select_time_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,24 +38,15 @@
                 android:text=""
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/selected_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/select_time_button"
-                android:layout_marginStart="0dp"
-                android:layout_toStartOf="@+id/select_time_button"
-                android:layout_toEndOf="@+id/timeTV"
-                android:text=""
-                android:textSize="20sp" />
+
 
             <Button
                 android:id="@+id/select_time_button"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_margin="0dp"
-                android:text="Change time"
+                android:text=""
                 style="@style/buttonStyle"/>
         </RelativeLayout>
     </LinearLayout>

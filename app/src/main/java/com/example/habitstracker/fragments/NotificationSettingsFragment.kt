@@ -32,7 +32,7 @@ class NotificationSettingsFragment : Fragment() {
     private val activityViewModel: ActivityViewModel by activityViewModels()
 
     private var _binding: NotificationSettingsFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding!! //NullPointerException
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,9 +53,12 @@ class NotificationSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initSpinner()
-        setListeners()
-        setInfo()
+        if(isAdded){
+            initSpinner()
+            setListeners()
+            setInfo()
+        }
+
     }
 
     private var fragmentContext: Context? = null
@@ -72,15 +75,18 @@ class NotificationSettingsFragment : Fragment() {
 
     private fun setInfo() {
         if (activityViewModel.getItemId() != null){
+        //проверяем есть ли нотификация у habit,
+        //если есть, заполняем поля
             viewModel.getNotificationInfo(activityViewModel.getItemId()!!)?.let { info ->
                 binding.checkbox.isChecked = true
                 binding.spinner.visibility = View.VISIBLE
                 binding.selectTimeLl.visibility = View.VISIBLE
-                binding.selectedTime.text = LocalTime.ofSecondOfDay(info.time)
+                binding.selectTimeButton.text = LocalTime.ofSecondOfDay(info.time)
                     .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
                 return@setInfo
             }
         }
+        //если нет, то прячем форму
         binding.checkbox.isChecked = false
         binding.spinner.visibility = View.GONE
         binding.selectTimeLl.visibility = View.GONE
@@ -109,44 +115,61 @@ class NotificationSettingsFragment : Fragment() {
 
     var time: LocalDateTime = LocalDateTime.now()
     private fun observeDate() {
+        //время нотификации
         activityViewModel.selectedTime.observe(requireActivity(), Observer { _time ->
-            binding.selectedTime.text =
-                _time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
-            if (_time.isAfter(LocalTime.now())) {
-                time = _time.atDate(LocalDate.now())
-            } else {
-                time = _time.atDate(LocalDate.now().plusDays(1))
+            if(isAdded){
+                binding.selectTimeButton.text =
+                    _time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+                if (_time.isAfter(LocalTime.now())) {
+                    time = _time.atDate(LocalDate.now())
+                } else {
+                    time = _time.atDate(LocalDate.now().plusDays(1))
+                }
             }
         }
         )
+        //если itemId меняется..
         activityViewModel.itemId.observe(requireActivity(), Observer {  id ->
-            viewModel.insertOrUpdate(activityViewModel.getItemId()!!, time.toLocalTime())
-            setNotification(time)
         })
+        //следим за навигацией
         viewModel.navigateEvent.observe(viewLifecycleOwner, EventObserver { destination_id ->
             findNavController().navigate(destination_id as Int)
         })
     }
 
     private fun setListeners() {
+        //вызываем тайм пикер по кнопке
         binding.selectTimeButton.setOnClickListener {
             val timePickerFragment = TimePickerFragment()
             timePickerFragment.show(parentFragmentManager,"timePicker")
         }
+        //чекбокс
         binding.checkbox.setOnCheckedChangeListener { compoundButton, b ->
+            //если вкл, показываем форму,
+            //ставим обсерверы для данных формы
+            //устанавливаем нотификацию
             if (compoundButton.isChecked) {
                 binding.spinner.visibility = View.VISIBLE
                 binding.selectTimeLl.visibility = View.VISIBLE
                 observeDate()
-                if (binding.selectedTime.text.isNullOrEmpty()) {
-                    binding.selectedTime.text =
+                if (binding.selectTimeButton.text.isNullOrEmpty()) {
+                    binding.selectTimeButton.text =
                         LocalTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
                 }
+                //обновляем запись в бд
+                viewModel.insertOrUpdateNotify(activityViewModel.getItemId()!!, time.toLocalTime())
+                //устанавливаем нотификацию
+                setNotification(time)
             } else {
+            //если выкл
+            //прячем форму
+            //удаляем нотификацию
                 binding.spinner.visibility = View.GONE
                 binding.selectTimeLl.visibility = View.GONE
                 if (activityViewModel.getItemId() != null && fragmentContext != null){
+                    //удаляем из бд
                     viewModel.removeNotificationInfo(activityViewModel.getItemId()!!)
+                    //удаляем нотификацию
                     Notificator(fragmentContext!!).removeNotification(
                         activityViewModel.getItemId()!!
                     )

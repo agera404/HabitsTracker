@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Трекер Привычек</string>
+    <string name="back_button">Назад</string>
+    <string name="save_button">Сохранить</string>
+    <string name="dont_add_to_calendar_button">Не добавлять в календарь</string>
+    <string name="history_map">Мстория</string>
+    <string name="set_notify_checkbox">включить уведомление</string>
+    <string name="error">Ошибка!</string>
+
+    <string-array name="notification_array">
+        <item>Ежедневно</item>
+        <item>Другое</item>
+    </string-array>
+</resources>

@@ -21,7 +21,7 @@
             android:id="@+id/not_add_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Don't add to calendar"/>
+            android:text="@string/dont_add_to_calendar_button"/>
     </LinearLayout>
 
 </FrameLayout>

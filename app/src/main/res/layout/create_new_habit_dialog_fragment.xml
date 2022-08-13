@@ -14,8 +14,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="New habit"
-        android:id="@+id/name_edittext"/>
+        android:id="@+id/name_edittext"
+        />
         <FrameLayout
             android:id="@+id/notification_fragment_container_2"
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         <Button
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Back"
+            android:text="@string/back_button"
             android:textAllCaps="true"
             android:layout_margin="0dp"
             style="@style/buttonStyle"
@@ -39,7 +39,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="Save"
+            android:text="@string/save_button"
             android:textAllCaps="true"
             style="@style/buttonStyle"
             android:id="@+id/save_button"/>

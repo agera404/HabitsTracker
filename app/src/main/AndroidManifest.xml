@@ -24,12 +24,12 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name=".common.MyReceiver"
+            android:name=".common.NotificationReceiver"
             android:enabled="true"
             android:exported="true" >
         </receiver>
         <service
-            android:name=".common.MyNewIntentService"
+            android:name=".common.NotificationIntentService"
             android:exported="true" >
         </service>
     </application>

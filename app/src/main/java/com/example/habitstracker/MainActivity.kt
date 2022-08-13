@@ -1,32 +1,22 @@
 package com.example.habitstracker
 
-import android.app.AlarmManager
-import android.app.Notification
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
 import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.example.habitstracker.common.MyNewIntentService
-import com.example.habitstracker.common.MyReceiver
 import com.example.habitstracker.databinding.ActivityMainBinding
 import com.example.habitstracker.viewmodels.ActivityViewModel
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {

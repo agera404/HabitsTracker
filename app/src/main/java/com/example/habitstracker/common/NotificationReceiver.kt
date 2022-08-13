@@ -8,13 +8,13 @@ import android.util.Log
 import com.example.habitstracker.models.NotificationData
 
 
-class MyReceiver : BroadcastReceiver() {
+class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         Log.d("dLog", "intent == null is " + (intent == null).toString())
         val info = intent?.getBundleExtra("Bundle")?.getParcelable<NotificationData>("Notification_Info")
 
         Log.d("dLog", "info " + (info?.title ?: "is null"))
-        val nintent = Intent(context, MyNewIntentService::class.java)
+        val nintent = Intent(context, NotificationIntentService::class.java)
         val bundle = Bundle()
         bundle.putParcelable("Notification_Info", info)
         nintent.putExtra(

@@ -49,8 +49,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //возможен memory leak
-        viewModel.context = requireContext()
+        viewModel.context = requireContext().applicationContext
         initRecyclerView()
         observeData()
 

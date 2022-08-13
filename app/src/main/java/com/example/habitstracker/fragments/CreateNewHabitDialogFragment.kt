@@ -1,10 +1,12 @@
 package com.example.habitstracker.fragments
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
@@ -46,8 +48,6 @@ class CreateNewHabitDialogFragment : DialogFragment() {
         binding.saveButton.setOnClickListener { saveOnClickButton() }
         binding.backButton.setOnClickListener { backOnClickButton() }
         attachNotificationFragment()
-
-
     }
 
     private fun attachNotificationFragment(){
@@ -56,16 +56,16 @@ class CreateNewHabitDialogFragment : DialogFragment() {
         transaction.replace(R.id.notification_fragment_container_2, notificationFragment).commit()
     }
     private fun saveOnClickButton(){
-        val name: String? = binding.nameEdittext.text.toString()
-        if (name != null){
+        val name: String = binding.nameEdittext.text.toString()
+        if (name.isNotBlank()){
             viewModel.insertNewHabit(name).observe(viewLifecycleOwner, Observer {
                 activityViewModel.setItemId(it)
             })
-            val toast = Toast.makeText(context, "The new habit was created successfully", Toast.LENGTH_LONG)
-            toast.show()
             backOnClickButton()
         }else{
-            val toast = Toast.makeText(context, "A name of a habit is empty!", Toast.LENGTH_LONG)
+            binding.nameEdittext.background = context?.resources?.getDrawable(R.drawable.edit_text_red_border)
+            binding.nameEdittext.requestFocus()
+            val toast = Toast.makeText(context, context?.resources?.getString(R.string.error), Toast.LENGTH_LONG)
             toast.show()
         }
 

@@ -21,13 +21,13 @@ class NotificationSettingsViewModel : ViewModel(), INavigationVM by NavigationVM
     fun removeNotificationInfo(habit_id: Long){
         HabitsRepository.removeNotification(habit_id)
     }
-    fun insertOrUpdate(id: Long, time: LocalTime){
+    fun insertOrUpdateNotify(id: Long, time: LocalTime){
         HabitsRepository.getNotificationByHabitId(id)?.let { entity ->
             viewModelScope.launch {
                 val updatedEntity = entity.apply { this.time = time.toSecondOfDay().toLong() }
                 HabitsRepository.updateNotification(updatedEntity)
             }
-            return@insertOrUpdate
+            return@insertOrUpdateNotify
         }
         val entity = NotificationEntity(null, id, time.toSecondOfDay().toLong())
         viewModelScope.launch {

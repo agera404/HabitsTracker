@@ -1,7 +1,12 @@
 <resources>
-    <string name="app_name">HabitsTracker</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">Habits Tracker</string>
+    <string name="back_button">Back</string>
+    <string name="save_button">Save</string>
+    <string name="dont_add_to_calendar_button">Don\'t add to calendar</string>
+    <string name="history_map">History</string>
+    <string name="set_notify_checkbox">set notification</string>
+    <string name="error">Error!</string>
+    
     <string-array name="notification_array">
         <item>Daily</item>
         <item>Custom</item>

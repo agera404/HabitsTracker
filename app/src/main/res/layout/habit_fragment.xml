@@ -52,7 +52,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="Heat Map"
+                android:text="@string/history_map"
                 android:textSize="20sp"
                 android:layout_alignParentLeft="true"
                 android:gravity="center"/>
