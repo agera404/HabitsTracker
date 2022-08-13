@@ -48,7 +48,7 @@ class EditDatesDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.idHabit = activityViewModel.getItemId()!!
-        binding.selectedDate.text = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
+        binding.selectDateButton.text = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
         this.isCancelable = false
         observeDate()
         setOnClickListeners()
@@ -63,7 +63,7 @@ class EditDatesDialogFragment : DialogFragment() {
             viewModel.setSelectedDate(it)
         })
         viewModel.selectedDate.observe(viewLifecycleOwner, Observer { date ->
-            binding.selectedDate.text = DateConverter.toString(date)
+            binding.selectDateButton.text = DateConverter.toString(date)
             setBackgroundForImageButton(viewModel.isDateExist(date, viewModel.idHabit))
         })
     }

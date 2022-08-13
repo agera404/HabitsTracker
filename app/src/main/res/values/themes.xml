@@ -7,8 +7,12 @@
     <style name="ToolBarStyle" parent="">
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:textSize" />
-        <item name="titleTextColor">@color/textColorSecendary</item>
+        <item name="titleTextColor">@color/textColorSecondary</item>
         <item name="title">@string/app_name</item>
+    </style>
+    <style name="buttonStyle" parent="">
+        <item name="backgroundTint">@color/colorPrimaryLight</item>
+        <item name="android:textColor">@color/textColorSecondary</item>
     </style>
 
 </resources>

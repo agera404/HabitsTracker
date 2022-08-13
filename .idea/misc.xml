@@ -29,8 +29,16 @@
         <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.171" />
         <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/drawable/ic_launcher_background.xml" value="0.171" />
         <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/layout/create_new_habit_dialog_fragment.xml" value="0.16197916666666667" />
+        <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/layout/edit_dates_dialog_fragment.xml" value="0.5" />
+        <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/layout/fragment_date_picker.xml" value="0.16197916666666667" />
+        <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/layout/fragment_show_local_calendar_dialog.xml" value="0.16197916666666667" />
+        <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/layout/fragment_time_picker.xml" value="0.16197916666666667" />
         <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/layout/habit_fragment.xml" value="0.16197916666666667" />
+        <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/layout/habit_item.xml" value="0.16197916666666667" />
+        <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/layout/local_calendar_item.xml" value="0.16197916666666667" />
         <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/layout/main_fragment.xml" value="0.16197916666666667" />
+        <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/layout/notification_settings_fragment.xml" value="0.25" />
         <entry key="..\:/Users/user/StudioProjects/HabitsTracker/app/src/main/res/menu/toolbar_menu.xml" value="0.16197916666666667" />
       </map>
     </option>

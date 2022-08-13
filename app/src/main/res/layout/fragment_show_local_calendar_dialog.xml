@@ -17,6 +17,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
         <Button
+            style="@style/buttonStyle"
             android:id="@+id/not_add_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

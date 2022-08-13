@@ -46,6 +46,8 @@ class CreateNewHabitDialogFragment : DialogFragment() {
         binding.saveButton.setOnClickListener { saveOnClickButton() }
         binding.backButton.setOnClickListener { backOnClickButton() }
         attachNotificationFragment()
+
+
     }
 
     private fun attachNotificationFragment(){
