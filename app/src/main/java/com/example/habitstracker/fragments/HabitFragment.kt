@@ -110,11 +110,12 @@ class HabitFragment : Fragment() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                viewModel.writeToCalendar(requireContext().applicationContext)
+                showCalendars()
             } else {
                 // Объяснить как дать permission через настройки
             }
         }
+    private lateinit var showCalendars: ()->Unit
     private fun observeData() {
         viewModel.navigateEvent.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigate(it as Int)
@@ -129,14 +130,16 @@ class HabitFragment : Fragment() {
                         setSelection(it.habitName.length)
                     }
                 }
-                binding.addToCalendarButton.text = it.habitEntity.calendar_id?.let { id ->
-                    LocalCalendarUtility(requireContext().applicationContext).getLocalCalendarById(
-                        id
-                    )?.name
+                showCalendars={
+                    binding.addToCalendarButton.text = it.habitEntity.calendar_id?.let { id ->
+                        LocalCalendarUtility(requireContext().applicationContext).getLocalCalendarById(
+                            id
+                        )?.name
+                    }
+                        ?: "Don't add to calendar"
+                    viewModel.writeToCalendar(requireContext().applicationContext)
                 }
-                    ?: "Don't add to calendar"
                 requestPermissionLauncher.launch(Manifest.permission.WRITE_CALENDAR)
-
             }
         })
     }

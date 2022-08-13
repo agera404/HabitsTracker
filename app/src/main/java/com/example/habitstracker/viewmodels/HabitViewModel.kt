@@ -30,14 +30,17 @@ class HabitViewModel : ViewModel(), INavigationVM by NavigationVM() {
     }
         private set(value) {}
 
+
     fun writeToCalendar(context: Context){
         if (idCalendar != null){
-            Log.d("Calendar_debug","Calendar ID is not null")
-            val event = LocalCalendarUtility(context).createEvent(idCalendar!!, Calendar.getInstance(), habitWDate.value!!.habitName)
-            val eventId = LocalCalendarUtility(context).addEventToCalendar(event)
-            if (eventId != null){
-                viewModelScope.launch {
-                    HabitsRepository.insertEvent(EventEntity(null, eventId, habitWDate.value!!.habitId!!, idCalendar!!))
+            if (habitWDate.value!!.getDateEntityByDate(LocalDate.now()) != null){
+                Log.d("Calendar_debug","Calendar ID is not null")
+                val event = LocalCalendarUtility(context).createEvent(idCalendar!!, Calendar.getInstance(), habitWDate.value!!.habitName)
+                val eventId = LocalCalendarUtility(context).addEventToCalendar(event)
+                if (eventId != null){
+                    viewModelScope.launch {
+                        HabitsRepository.insertEvent(EventEntity(null, eventId, habitWDate.value!!.habitId!!, idCalendar!!))
+                    }
                 }
             }
         }else{

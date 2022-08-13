@@ -107,12 +107,11 @@ class CalendarHeatMapView(context: Context, val minDate: LocalDate, val dateSet:
         if (flag) {
             backgroundParams.apply {
                 drawable = R.drawable.ic_baseline_done_24
-                color = Color.GREEN
+
             }
         } else {
             backgroundParams.apply {
                 drawable = R.drawable.ic_baseline_close_24
-                color = Color.GRAY
             }
         }
         var imageView: ImageView = ImageView(context)
@@ -120,7 +119,7 @@ class CalendarHeatMapView(context: Context, val minDate: LocalDate, val dateSet:
         imageView.minimumWidth = 75
         imageView.minimumHeight = 75
         imageView.foreground = context.resources.getDrawable(backgroundParams.drawable!!)
-        imageView.setBackgroundColor(backgroundParams.color!!)
+        //imageView.setBackgroundColor(backgroundParams.color!!)
         return imageView
     }
 }

@@ -37,7 +37,12 @@ data class HabitWDate(
     }
     fun getDateEntityByDate(date: LocalDate): DateEntity? {
         val date_str = DateConverter.toString(date)
-        return dates.firstOrNull{DateConverter.toString(date) == date_str}
+        for (_date in dates){
+            if (date_str == DateConverter.toString(_date.date)){
+                return _date
+            }
+        }
+        return null
     }
     fun getMinDate(): LocalDate{
         var minDate: LocalDate = LocalDate.now()

@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         val toolbar = binding.toolbar
         val conf = AppBarConfiguration.Builder(navController.graph).build()
         toolbar.setupWithNavController(navController,conf)
+        //toolbar.title = this.resources.getString(R.string.app_name)
 
         toolbar.setOnMenuItemClickListener{ menuItem ->
             when(menuItem.itemId){

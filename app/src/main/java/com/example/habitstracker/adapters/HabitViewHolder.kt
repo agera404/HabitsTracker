@@ -1,5 +1,6 @@
 package com.example.habitstracker.adapters
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -34,12 +35,15 @@ class HabitViewHolder(private val _binding: HabitItemBinding) : RecyclerView.Vie
             _binding.habitItemTwodayago,
             _binding.habitItemThreedayago
         )
-        listOfImageView.forEachIndexed { index, imageView ->
-            if(item.getDateEntityByDate(getDaysAgo((index+1).toLong())) != null){
+        for (imageView in listOfImageView){
+            val index = listOfImageView.indexOf(imageView)
+            val dateEntity = item.getDateEntityByDate(getDaysAgo((index+1).toLong()))
+            if(dateEntity != null){
                 setBackgroundForImageView(imageView, true)
             }else{
                 setBackgroundForImageView(imageView, false)
             }
+
         }
     }
 
