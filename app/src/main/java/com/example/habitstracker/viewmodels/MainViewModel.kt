@@ -2,21 +2,20 @@ package com.example.habitstracker.viewmodels
 
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
-import com.example.habitstracker.common.LocalCalendarUtility
 import com.example.habitstracker.models.*
 import com.example.habitstracker.repositories.HabitsRepository
+import com.example.habitstracker.viewmodels.common.CalendarWriteAndRemove
+import com.example.habitstracker.viewmodels.common.ICalendarWriteAndRemove
 import com.example.habitstracker.viewmodels.common.interfaces.INavigationVM
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
-import java.util.*
 
 
-class MainViewModel : ViewModel(), INavigationVM by NavigationVM() {
+class MainViewModel : ViewModel(), INavigationVM by NavigationVM(), ICalendarWriteAndRemove by CalendarWriteAndRemove() {
 
     private var _habitsList: MutableLiveData<List<HabitWDate>> = MutableLiveData<List<HabitWDate>>()
     val habitsList: LiveData<List<HabitWDate>> = _habitsList
@@ -44,31 +43,26 @@ class MainViewModel : ViewModel(), INavigationVM by NavigationVM() {
         }
         return true
     }
-    //возможен memory leak
     var context :Context? = null
     fun insertTodayDate(habitEntity: HabitEntity) {
         runBlocking {
             habitEntity.id_habit?.let { HabitsRepository.insertDate(it, LocalDate.now()) }
-            writeToCalendar(context!!, habitEntity)
+            writeToCalendar(context!!, habitEntity, LocalDate.now())
         }
-
-    }
-    suspend fun writeToCalendar(context: Context, habitEntity: HabitEntity){
-        if (habitEntity.calendar_id != null){
-            Log.d("Calendar_debug","Calendar ID is not null")
-            val event = LocalCalendarUtility(context).createEvent(habitEntity.calendar_id!!, Calendar.getInstance(), habitEntity.name)
-            val eventId = LocalCalendarUtility(context).addEventToCalendar(event)
-            if (eventId != null){
-                HabitsRepository.insertEvent(EventEntity(null, eventId, habitEntity.id_habit!!, habitEntity.calendar_id!!))
-            }
-        }else{
-            Log.d("Calendar_debug","Calendar ID is null")
-        }
-
     }
 
     fun removeTodayDate(date: DateEntity) {
         HabitsRepository.removeDate(date)
+        val habit = HabitsRepository.getHabitById(date.id_habit)
+        if(habit?.calendar_id != null){
+            val eventEntity = HabitsRepository.getEventEntityByParameters(habit.calendar_id,
+                habit.id_habit!!, DateConverter.toString(date.date)!!
+            )
+            if (eventEntity != null){
+                removeFromCalendar(context!!, eventEntity.id_event!!)
+            }
+        }
+
     }
 
     fun deleteHabit(habitEntity: HabitEntity) {

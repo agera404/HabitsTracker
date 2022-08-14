@@ -77,10 +77,12 @@ class EditDatesDialogFragment : DialogFragment() {
         binding.selectDateButton.setOnClickListener { viewModel.navigateToDatePicker() }
         binding.checkDateButton.setOnClickListener {
             if (viewModel.isDateExist(viewModel.selectedDate.value!!, viewModel.idHabit)){
-                viewModel.removeDate(viewModel.idHabit, viewModel.selectedDate.value!!)
+                viewModel.removeDate(viewModel.idHabit, viewModel.selectedDate.value!!, requireContext().applicationContext)
+                //удалить из календаря, если необходимо
                 setBackgroundForImageButton(false)
             }else{
-                viewModel.insertDate(viewModel.idHabit, viewModel.selectedDate.value!!)
+                viewModel.insertDate(viewModel.idHabit, viewModel.selectedDate.value!!, requireContext().applicationContext)
+                //записать в календарь, если необходимо
                 setBackgroundForImageButton(true)
             }
         }

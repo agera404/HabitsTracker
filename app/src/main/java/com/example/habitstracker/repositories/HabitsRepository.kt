@@ -1,7 +1,5 @@
 package com.example.habitstracker.repositories
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import com.example.habitstracker.database.AppDatabase
 import com.example.habitstracker.models.*
 import kotlinx.coroutines.*
@@ -62,5 +60,8 @@ object HabitsRepository {
     suspend fun updateNotification(entity: NotificationEntity) = db.notificationDao().update(entity)
     suspend fun insertEvent(entity: EventEntity) = db.eventDao().insert(entity)
     fun removeEvent(entity: EventEntity) = db.eventDao().delete(entity)
+    fun getEventEntityById(id: Long): EventEntity = db.eventDao().getEventById(id)
+    fun getEventEntityByParameters(idCalendar: Int?, idHabit: Long, date: String): EventEntity =
+        db.eventDao().getEventByHabitIdCalendarIdAndDate(idCalendar,idHabit,date)
 
 }

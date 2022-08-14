@@ -112,7 +112,6 @@ class HabitFragment : Fragment() {
         ) { isGranted: Boolean ->
             if (isGranted) {
                 showCalendars()
-                viewModel.writeToCalendar(requireContext().applicationContext)
             } else {
                 Toast.makeText(requireContext(),context?.resources?.getString(R.string.no_permission), Toast.LENGTH_SHORT)
             }

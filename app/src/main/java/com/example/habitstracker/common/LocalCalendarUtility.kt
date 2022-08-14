@@ -43,7 +43,7 @@ class LocalCalendarUtility(val context: Context) {
         return calendars.firstOrNull { (it?.id ?: -1) == id }
     }
 
-    fun removeEvent(id: Int, eventID: Long?){
+    fun removeEvent(eventID: Long?){
         val cr: ContentResolver = context.getContentResolver()
         val values = ContentValues()
         var deleteUri: Uri? = null

@@ -1,9 +1,6 @@
 package com.example.habitstracker.database.Dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Update
+import androidx.room.*
 import com.example.habitstracker.models.EventEntity
 
 @Dao
@@ -16,4 +13,10 @@ interface EventDao {
 
     @Delete
     fun delete(entity: EventEntity)
+
+    @Query("SELECT * FROM events WHERE id_event = :id")
+    fun getEventById(id: Long): EventEntity
+
+    @Query("SELECT * FROM events WHERE id_calendar = :idCalendar AND id_habit = :idHabit AND date = :date")
+    fun getEventByHabitIdCalendarIdAndDate(idCalendar: Int?, idHabit: Long, date: String): EventEntity
 }
