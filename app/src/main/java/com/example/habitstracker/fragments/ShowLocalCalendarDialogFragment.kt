@@ -48,9 +48,10 @@ class ShowLocalCalendarDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         this.isCancelable = false
         viewModel.habit_id = activityViewModel.getItemId()
-
-        requestPermissionLauncher.launch(Manifest.permission.READ_CALENDAR, )
-
+        //Запрашиваем права для чтения календаря
+        //если права есть, отрисовываем календари
+        requestPermissionLauncher.launch(Manifest.permission.READ_CALENDAR )
+        setOnClockListeners()
     }
     val requestPermissionLauncher =
         registerForActivityResult(
@@ -59,13 +60,13 @@ class ShowLocalCalendarDialogFragment : DialogFragment() {
             if (isGranted) {
                 ifPermissionGranted()
             } else {
-                // Объяснить как дать permission через настройки
+                //findNavController().popBackStack()
             }
         }
 
     fun ifPermissionGranted() {
+        //отрисовываем календари
         initRecyclerView()
-        setOnClockListeners()
     }
 
     override fun onDestroyView() {
@@ -83,7 +84,12 @@ class ShowLocalCalendarDialogFragment : DialogFragment() {
     private fun initRecyclerView(){
         recyclerView = binding.recyclerView
         recyclerView?.adapter = LocalCalendarsAdapter(
+            //получаем все доступные календари
             viewModel.getLocalCalendars(requireContext()) as MutableList<LocalCalendar?>,
+            //setLocalCalendarId нужен для обработки нажатия по календарю
+            //если кликнули по календарю,
+            //отдаем id календаря во viewModel,
+            //где viewModel создает новую связь habit - calendar в бд
             setLocalCalendarId = { id: Int -> viewModel.setCalendarId(id) },
             closeDialog = {findNavController().popBackStack()})
     }

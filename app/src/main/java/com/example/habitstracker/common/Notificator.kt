@@ -16,7 +16,6 @@ interface INotificator {
 class Notificator(val context: Context, val info: NotificationData? = null) : INotificator {
 
     override fun createNotification() {
-        Log.d("dLog", "creating notify for ${info!!.title} at ${info!!.date}")
         val notifyIntent = Intent(context, NotificationReceiver::class.java)
         val bundle = Bundle()
         bundle.putParcelable("Notification_Info", info)
@@ -25,19 +24,21 @@ class Notificator(val context: Context, val info: NotificationData? = null) : IN
         )
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            info.id,
+            info!!.id,
             notifyIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val timeInMillis = info.date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
+        val timeInMillis = info.date.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
+        if (timeInMillis != null) {
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                timeInMillis,
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent
+            )
+        }
     }
 
     fun removeNotification(id: Long) {

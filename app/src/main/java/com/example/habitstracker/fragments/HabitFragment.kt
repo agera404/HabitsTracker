@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -23,6 +24,7 @@ import com.example.habitstracker.EventObserver
 import com.example.habitstracker.R
 import com.example.habitstracker.common.LocalCalendarUtility
 import com.example.habitstracker.databinding.HabitFragmentBinding
+import com.example.habitstracker.models.HabitWDate
 import com.example.habitstracker.ui.CalendarHeatMapView
 import com.example.habitstracker.viewmodels.ActivityViewModel
 import com.example.habitstracker.viewmodels.HabitViewModel
@@ -51,13 +53,12 @@ class HabitFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setItem()
-        observeData()
-        setDatesMap()
+        setItem()//передаем id_habit во viewModel и вытаскиваем habit_with_dates для отрисовки
+        observeData() // подписываемся для обнавления ui
+        setDatesMap() // отрисовываем history map
         setOnClickListeners()
         addTextChangedListeners()
         attachNotificationFragment()
-
     }
 
 
@@ -105,40 +106,49 @@ class HabitFragment : Fragment() {
         binding.addToCalendarButton.setOnClickListener { viewModel.navigateToShowLocalCalendars() }
     }
 
-    val requestPermissionLauncher =
+    val requestPermissionLauncher  =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
                 showCalendars()
+                viewModel.writeToCalendar(requireContext().applicationContext)
             } else {
-                // Объяснить как дать permission через настройки
+                Toast.makeText(requireContext(),context?.resources?.getString(R.string.no_permission), Toast.LENGTH_SHORT)
             }
         }
-    private lateinit var showCalendars: ()->Unit
+    private var showCalendars: ()->Unit = {
+        binding.addToCalendarButton.text = habitWDate?.habitEntity?.calendar_id?.let { id ->
+            LocalCalendarUtility(requireContext().applicationContext).getLocalCalendarById(
+                id
+            )?.name
+        }
+            ?: context?.resources?.getString(R.string.dont_add_to_calendar_button)
+
+    }
+    var habitWDate: HabitWDate? = null
     private fun observeData() {
+        //навигация
         viewModel.navigateEvent.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigate(it as Int)
         })
+
         viewModel.habitWDate.observe(viewLifecycleOwner, Observer {
+            //если habit_with_dates получен из БД
             if (it != null) {
+                //чистим history_map
                 binding.heatmap.removeAllViews()
+                //отрисовываем history_map снова
                 setDatesMap()
+                //устанавливаем название привычки в editText
                 binding.habitName.apply {
                     applyWithDisabledTextWatcher(textWatcherForName) {
                         setText(it.habitName)
                         setSelection(it.habitName.length)
                     }
                 }
-                showCalendars={
-                    binding.addToCalendarButton.text = it.habitEntity.calendar_id?.let { id ->
-                        LocalCalendarUtility(requireContext().applicationContext).getLocalCalendarById(
-                            id
-                        )?.name
-                    }
-                        ?: "Don't add to calendar"
-                    viewModel.writeToCalendar(requireContext().applicationContext)
-                }
+                habitWDate = it
+                //загружаем календарь из БД, если он есть
                 requestPermissionLauncher.launch(Manifest.permission.WRITE_CALENDAR)
             }
         })

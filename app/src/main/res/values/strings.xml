@@ -6,7 +6,7 @@
     <string name="history_map">History</string>
     <string name="set_notify_checkbox">set notification</string>
     <string name="error">Error!</string>
-    
+    <string name="no_permission">No permission</string>
     <string-array name="notification_array">
         <item>Daily</item>
         <item>Custom</item>

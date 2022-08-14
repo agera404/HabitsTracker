@@ -52,7 +52,6 @@ class MainFragment : Fragment() {
         viewModel.context = requireContext().applicationContext
         initRecyclerView()
         observeData()
-
     }
 
     override fun onDestroyView() {

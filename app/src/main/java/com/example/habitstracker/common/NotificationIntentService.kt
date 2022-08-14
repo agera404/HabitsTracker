@@ -7,12 +7,12 @@ import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import com.example.habitstracker.MainActivity
 import com.example.habitstracker.models.NotificationData
+import java.time.LocalTime
 
 
 class NotificationIntentService : IntentService("MyNewIntentService") {
     override fun onHandleIntent(intent: Intent?) {
         val context = applicationContext
-        Log.d("dLog", "intent == null is" + (intent == null).toString())
         val info = intent?.getBundleExtra("Bundle")?.getParcelable<NotificationData>("Notification_Info")
         if (info != null){
             val builder: Notification.Builder = Notification.Builder(this).apply {
@@ -33,15 +33,8 @@ class NotificationIntentService : IntentService("MyNewIntentService") {
             builder.setChannelId(channelId)
             val notificationCompat: Notification = builder.build()
             managerCompat.notify(info.id.toInt(), notificationCompat)
-            if(info.isRepeating){
-                //info.date = info.date.plusDays(1)
-                //Notificator(context,info).createNotification()
-                //Log.d("dLog","notification for "+ info.date+" has been created")
-            }
-            Log.d("dLog","onHandleIntent() 1")
-        }
-        Log.d("dLog","onHandleIntent() 2")
 
+        }
     }
 
 }

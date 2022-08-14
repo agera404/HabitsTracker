@@ -10,7 +10,6 @@ import com.example.habitstracker.models.NotificationData
 
 class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
-        Log.d("dLog", "intent == null is " + (intent == null).toString())
         val info = intent?.getBundleExtra("Bundle")?.getParcelable<NotificationData>("Notification_Info")
 
         Log.d("dLog", "info " + (info?.title ?: "is null"))
@@ -21,6 +20,5 @@ class NotificationReceiver : BroadcastReceiver() {
             "Bundle", bundle
         )
         context.startService(nintent)
-        Log.d("dLog","onReceive()")
     }
 }

@@ -2,6 +2,7 @@ package com.example.habitstracker.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +33,7 @@ class NotificationSettingsFragment : Fragment() {
     private val activityViewModel: ActivityViewModel by activityViewModels()
 
     private var _binding: NotificationSettingsFragmentBinding? = null
-    private val binding get() = _binding!! //NullPointerException
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,12 +54,9 @@ class NotificationSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(isAdded){
-            initSpinner()
-            setListeners()
-            setInfo()
-        }
-
+        initSpinner()
+        setListeners()
+        setInfo()
     }
 
     private var fragmentContext: Context? = null
@@ -110,27 +108,31 @@ class NotificationSettingsFragment : Fragment() {
                     true
                 )
             ).createNotification()
+            Log.d("dLog","notification for " + date.toString())
         }
     }
 
-    var time: LocalDateTime = LocalDateTime.now()
+    var localDateTime: LocalDateTime = LocalDateTime.now()
+
     private fun observeDate() {
         //время нотификации
-        activityViewModel.selectedTime.observe(requireActivity(), Observer { _time ->
+         activityViewModel.selectedTime.observe(requireActivity(), Observer { _time ->
             if(isAdded){
                 binding.selectTimeButton.text =
                     _time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
                 if (_time.isAfter(LocalTime.now())) {
-                    time = _time.atDate(LocalDate.now())
+                    localDateTime = _time.atDate(LocalDate.now())
                 } else {
-                    time = _time.atDate(LocalDate.now().plusDays(1))
+                    localDateTime = _time.atDate(LocalDate.now().plusDays(1))
                 }
+                //обновляем нотификацию
+                //обновляем запись в бд
+                viewModel.insertOrUpdateNotify(activityViewModel.getItemId()!!, localDateTime.toLocalTime())
+                //устанавливаем нотификацию
+                setNotification(localDateTime)
             }
         }
         )
-        //если itemId меняется..
-        activityViewModel.itemId.observe(requireActivity(), Observer {  id ->
-        })
         //следим за навигацией
         viewModel.navigateEvent.observe(viewLifecycleOwner, EventObserver { destination_id ->
             findNavController().navigate(destination_id as Int)
@@ -152,14 +154,10 @@ class NotificationSettingsFragment : Fragment() {
                 binding.spinner.visibility = View.VISIBLE
                 binding.selectTimeLl.visibility = View.VISIBLE
                 observeDate()
-                if (binding.selectTimeButton.text.isNullOrEmpty()) {
+                if (binding.selectTimeButton.text.isNullOrBlank()) {
                     binding.selectTimeButton.text =
                         LocalTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
                 }
-                //обновляем запись в бд
-                viewModel.insertOrUpdateNotify(activityViewModel.getItemId()!!, time.toLocalTime())
-                //устанавливаем нотификацию
-                setNotification(time)
             } else {
             //если выкл
             //прячем форму

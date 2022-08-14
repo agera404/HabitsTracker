@@ -50,10 +50,13 @@ class HabitViewModel : ViewModel(), INavigationVM by NavigationVM() {
     }
 
     fun setHabitName(name: String) {
-        val updatedHabit =  HabitEntity(habitWDate.value?.habitId!!,name, habitWDate.value?.habitEntity!!.calendar_id)
-        viewModelScope.launch {
-            HabitsRepository.updateHabit(updatedHabit)
+        if (habitWDate.value?.habitId != null){
+            val updatedHabit =  HabitEntity(habitWDate.value?.habitId!!,name, habitWDate.value?.habitEntity!!.calendar_id)
+            viewModelScope.launch {
+                HabitsRepository.updateHabit(updatedHabit)
+            }
         }
+
     }
 
 
