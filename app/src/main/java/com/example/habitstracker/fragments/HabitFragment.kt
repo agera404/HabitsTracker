@@ -1,13 +1,9 @@
 package com.example.habitstracker.fragments
 
 import android.Manifest
-import android.content.Context
-import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,9 +21,10 @@ import com.example.habitstracker.R
 import com.example.habitstracker.common.LocalCalendarUtility
 import com.example.habitstracker.databinding.HabitFragmentBinding
 import com.example.habitstracker.models.HabitWDate
-import com.example.habitstracker.ui.CalendarHeatMapView
+import com.example.habitstracker.ui.HistoryMap
 import com.example.habitstracker.viewmodels.ActivityViewModel
 import com.example.habitstracker.viewmodels.HabitViewModel
+import java.time.LocalDate
 
 
 class HabitFragment : Fragment() {
@@ -53,6 +50,7 @@ class HabitFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.context = requireContext().applicationContext
         setItem()//передаем id_habit во viewModel и вытаскиваем habit_with_dates для отрисовки
         observeData() // подписываемся для обнавления ui
         setDatesMap() // отрисовываем history map
@@ -102,7 +100,11 @@ class HabitFragment : Fragment() {
     }
 
     private fun setOnClickListeners() {
-        binding.editDatesButton.setOnClickListener { viewModel.navigateToEditDates() }
+        binding.editDatesButton.setOnClickListener {
+            viewModel.navigateToEditDates()
+            activityViewModel.setItemId(viewModel.idHabit!!)
+            activityViewModel.setDates(viewModel.habitWDate.value!!.listOfDates)
+        }
         binding.addToCalendarButton.setOnClickListener { viewModel.navigateToShowLocalCalendars() }
     }
 
@@ -155,13 +157,18 @@ class HabitFragment : Fragment() {
 
     private fun setDatesMap() {
         if (viewModel.habitWDate.value != null){
-            val calendarHeatMapView =
-                CalendarHeatMapView(
-                    requireContext(),
-                    viewModel.habitWDate.value!!.getMinDate(),
-                    viewModel.habitWDate.value!!.listOfDates
-                )
-            binding.heatmap.addView(calendarHeatMapView)
+            //val calendarHeatMapView =
+            //    CalendarHeatMapView(
+            //        requireContext(),
+            //        viewModel.habitWDate.value!!.getMinDate(),
+            //        viewModel.habitWDate.value!!.listOfDates
+            //    )
+            val historyMap = HistoryMap(requireContext().applicationContext,
+            binding.heatmap.width, binding.heatmap.height,
+            viewModel.habitWDate.value!!.listOfDates, false, {date: LocalDate ->  viewModel.changeDataStatus(date)})
+            binding.heatmap.addView(historyMap)
+
+            //binding.heatmap.addView(calendarHeatMapView)
         }
 
     }

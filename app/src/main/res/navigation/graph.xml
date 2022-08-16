@@ -21,11 +21,11 @@
         android:id="@+id/createNewHabitDialogFragment"
         android:name="com.example.habitstracker.fragments.CreateNewHabitDialogFragment"
         tools:layout="@layout/create_new_habit_dialog_fragment" />
-    <dialog
+    <fragment
         android:id="@+id/editDatesDialogFragment"
-        android:name="com.example.habitstracker.fragments.EditDatesDialogFragment"
+        android:name="com.example.habitstracker.fragments.EditDatesFragment"
         tools:layout="@layout/edit_dates_dialog_fragment" >
-    </dialog>
+    </fragment>
     <dialog
         android:id="@+id/datePickerFragment"
         android:name="com.example.habitstracker.fragments.DatePickerFragment"

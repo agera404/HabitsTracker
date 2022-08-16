@@ -18,6 +18,16 @@ class ActivityViewModel(application: Application) : AndroidViewModel(application
         HabitsRepository.db = AppDatabase.getInstance(context)
     }
 
+    private var _dates: MutableLiveData<List<LocalDate>> = MutableLiveData()
+    val dates: LiveData<List<LocalDate>> = _dates
+
+    fun setDates(dates: List<LocalDate>){
+        _dates.value = dates
+    }
+    fun getDates(): List<LocalDate>? {
+        return _dates.value
+    }
+
 
     private var _selectedTime: MutableLiveData<LocalTime> = MutableLiveData<LocalTime>()
     val selectedTime: LiveData<LocalTime> = _selectedTime

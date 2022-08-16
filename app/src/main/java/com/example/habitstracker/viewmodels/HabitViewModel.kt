@@ -2,6 +2,8 @@ package com.example.habitstracker.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.*
+import com.example.habitstracker.models.DateConverter
+import com.example.habitstracker.models.DateEntity
 import com.example.habitstracker.models.HabitEntity
 import com.example.habitstracker.models.HabitWDate
 import com.example.habitstracker.repositories.HabitsRepository
@@ -22,6 +24,11 @@ class HabitViewModel : ViewModel(), INavigationVM by NavigationVM(), ICalendarWr
         return habitWDate.value?.calendarId
     }
         private set(value) {}
+    val idHabit: Long?
+        get() {
+            return habitWDate.value?.habitId
+        }
+    lateinit var context: Context
 
 
     fun writeToCalendar(context: Context){
@@ -59,6 +66,41 @@ class HabitViewModel : ViewModel(), INavigationVM by NavigationVM(), ICalendarWr
             }
         }
     }
+    fun changeDataStatus(date: LocalDate){
+        if (idHabit!=null){
+            if (isDateExist(date, idHabit!!)){
+                removeDate(idHabit!!, date, context)
+            }else{
+                insertDate(idHabit!!, date, context)
+            }
+        }
 
+    }
+
+    fun isDateExist(date: LocalDate, idHabit: Long):Boolean{
+        return HabitsRepository.isDateExist(date, idHabit)
+    }
+    fun insertDate(idHabit: Long, date: LocalDate, context: Context){
+        viewModelScope.launch {
+            HabitsRepository.insertDate(idHabit, date)
+            val habitEntity = HabitsRepository.getHabitById(idHabit)
+            if (habitEntity != null) {
+                writeToCalendar(context, habitEntity, date)
+            }
+        }
+    }
+    fun removeDate(idHabit: Long, date: LocalDate, context: Context){
+        var id = HabitsRepository.findDate(date,idHabit)
+        if (id != null){
+            HabitsRepository.removeDate(DateEntity(id,date,idHabit))
+        }
+        val habitEntity = HabitsRepository.getHabitById(idHabit)
+        val eventEntity = HabitsRepository.getEventEntityByParameters(
+            habitEntity?.calendar_id,
+            idHabit,
+            DateConverter.toString(date)!!
+        )
+        eventEntity?.id_event?.let { removeFromCalendar(context, it) }
+    }
 
 }

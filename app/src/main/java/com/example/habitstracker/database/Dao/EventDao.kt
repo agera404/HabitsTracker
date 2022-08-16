@@ -18,5 +18,5 @@ interface EventDao {
     fun getEventById(id: Long): EventEntity
 
     @Query("SELECT * FROM events WHERE id_calendar = :idCalendar AND id_habit = :idHabit AND date = :date")
-    fun getEventByHabitIdCalendarIdAndDate(idCalendar: Int?, idHabit: Long, date: String): EventEntity
+    fun getEventByHabitIdCalendarIdAndDate(idCalendar: Int?, idHabit: Long, date: String): EventEntity?
 }
