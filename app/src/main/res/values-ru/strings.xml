@@ -8,6 +8,7 @@
     <string name="set_notify_checkbox">включить уведомление</string>
     <string name="error">Ошибка!</string>
     <string name="no_permission">Нет разрешения</string>
+    <string name="click_back_again">Нажмите назад еще раз, чтобы выйти</string>
 
     <string-array name="notification_array">
         <item>Ежедневно</item>

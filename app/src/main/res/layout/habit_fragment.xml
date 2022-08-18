@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HabitFragment">
+    tools:context=".ui.habit.HabitFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,9 +38,9 @@
                     android:layout_marginEnd="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Don't add to calendar"
                     android:background="@null"
-                    android:textAlignment="textStart"/>
+                    android:textAlignment="textStart"
+                    />
             </LinearLayout>
         </RelativeLayout>
         <RelativeLayout
@@ -49,27 +49,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="@string/history_map"
-                android:textSize="20sp"
-                android:layout_alignParentLeft="true"
-                android:gravity="center"/>
-
-            <ImageButton
-                android:id="@+id/edit_dates_button"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_alignParentEnd="true"
-                android:background="@drawable/ic_baseline_edit_24" />
             <LinearLayout
-                android:id="@+id/heatmap"
+                android:id="@+id/linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentLeft="true">
+                <TextView
+                    android:id="@+id/historyTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="@string/history_map"
+                    android:textSize="20sp"
+                    android:gravity="center"/>
+
+                <ImageButton
+                    android:id="@+id/edit_dates_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/ic_baseline_edit_24"
+                    android:gravity="bottom" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/history_map"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_below="@id/edit_dates_button"
+                android:layout_below="@id/linear"
                 >
 
             </LinearLayout>

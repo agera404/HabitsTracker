@@ -2,14 +2,13 @@ package com.example.habitstracker.ui
 
 import android.content.Context
 import android.graphics.*
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.example.habitstracker.R
 import com.example.habitstracker.models.DateConverter
 import java.time.LocalDate
 
-class HistoryMap(context: Context, private val _width: Int, val _height: Int, private val dateSet: List<LocalDate>,
+class HistoryMap(context: Context, private val _width: Int, val _height: Int, private val listOfDates: List<LocalDate>,
                  private val isLarge:Boolean, val passDate:(date: LocalDate)->Unit): View(context), View.OnTouchListener {
 
     private var today: LocalDate
@@ -73,7 +72,7 @@ class HistoryMap(context: Context, private val _width: Int, val _height: Int, pr
                     right = left - rec_size
                 }
                 //проверяем есть ли эта дата в бд
-                val date = dateSet.find { DateConverter.toString(it).equals(DateConverter.toString(day)) }
+                val date = listOfDates.find { DateConverter.toString(it).equals(DateConverter.toString(day)) }
 
                 val paint: Paint = Paint().apply {
                     isAntiAlias = true
@@ -93,7 +92,6 @@ class HistoryMap(context: Context, private val _width: Int, val _height: Int, pr
             }
             temp_day = day
             month++
-            Log.d("dLog","next month: " + month)
         }
 
         return array
@@ -110,7 +108,7 @@ class HistoryMap(context: Context, private val _width: Int, val _height: Int, pr
             for (item in arrayOfSad){
                 canvas.drawRoundRect(item.rectF, ROUND_REC_RX_RY, ROUND_REC_RX_RY, item.paint)
                 item.drawText(canvas)
-                if (item.date.dayOfMonth < 7){
+                if (item.date.dayOfMonth < 8){
                     if (item.date.dayOfWeek.value == 1){
                         canvas.drawText(item.date.month.toString(),item.rectF.left,START_Y_CANVAS - 15, item.textPaint)
                     }
@@ -125,7 +123,6 @@ class HistoryMap(context: Context, private val _width: Int, val _height: Int, pr
             if (event.getAction() == MotionEvent.ACTION_DOWN){
                 val sad = getSadObject(event)
                 if (sad != null){
-                    Log.d("dLog",sad.date.toString())
                     passDate(sad.date)
                 }
             }

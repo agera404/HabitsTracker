@@ -7,35 +7,31 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.habitstracker.fragments.MainFragment"
+        android:name="com.example.habitstracker.ui.main.MainFragment"
         android:label="@string/app_name"
         tools:layout="@layout/main_fragment" >
     </fragment>
     <fragment
         android:id="@+id/habitFragment"
-        android:name="com.example.habitstracker.fragments.HabitFragment"
+        android:name="com.example.habitstracker.ui.habit.HabitFragment"
         tools:layout="@layout/habit_fragment" >
 
     </fragment>
     <dialog
         android:id="@+id/createNewHabitDialogFragment"
-        android:name="com.example.habitstracker.fragments.CreateNewHabitDialogFragment"
+        android:name="com.example.habitstracker.ui.createnewhabit.CreateNewHabitDialogFragment"
         tools:layout="@layout/create_new_habit_dialog_fragment" />
     <fragment
         android:id="@+id/editDatesDialogFragment"
-        android:name="com.example.habitstracker.fragments.EditDatesFragment"
+        android:name="com.example.habitstracker.ui.editdates.EditDatesFragment"
         tools:layout="@layout/edit_dates_dialog_fragment" >
     </fragment>
     <dialog
-        android:id="@+id/datePickerFragment"
-        android:name="com.example.habitstracker.fragments.DatePickerFragment"
-        tools:layout="@layout/fragment_date_picker" />
-    <dialog
         android:id="@+id/timePickerFragment"
-        android:name="com.example.habitstracker.fragments.TimePickerFragment"
+        android:name="com.example.habitstracker.ui.TimePickerFragment"
         tools:layout="@layout/fragment_time_picker" />
     <dialog
         android:id="@+id/showLocalCalendarDialogFragment"
-        android:name="com.example.habitstracker.fragments.ShowLocalCalendarDialogFragment"
+        android:name="com.example.habitstracker.ui.showlocalcalendars.ShowLocalCalendarDialogFragment"
         tools:layout="@layout/fragment_show_local_calendar_dialog" />
 </navigation>
