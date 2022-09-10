@@ -18,7 +18,7 @@ class CalendarWriteAndRemove @Inject constructor
     suspend fun writeToCalendar(habitEntity: HabitEntity, date: LocalDate) {
         if (habitEntity.calendar_id != null){
             val calendar: Calendar = Calendar.getInstance()
-            val zoneId: ZoneId = ZoneId.systemDefault()
+            //val zoneId: ZoneId = ZoneId.systemDefault()
             calendar.set(date.year, date.month.value - 1, date.dayOfMonth)
             val event = LocalCalendarUtility(context).createEvent(habitEntity.calendar_id!!, calendar, habitEntity.name)
             val eventId = LocalCalendarUtility(context).addEventToCalendar(event)

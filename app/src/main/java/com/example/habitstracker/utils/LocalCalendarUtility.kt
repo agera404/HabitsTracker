@@ -47,11 +47,10 @@ class LocalCalendarUtility @Inject constructor
     }
 
     fun removeEvent(eventID: Long?){
-        val cr: ContentResolver = context.getContentResolver()
-        val values = ContentValues()
-        var deleteUri: Uri? = null
-        deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID!!)
-        val rows: Int = context.getContentResolver().delete(deleteUri, null, null)
+        //val cr: ContentResolver = context.getContentResolver()
+        //val values = ContentValues()
+        val deleteUri: Uri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID!!)
+        context.contentResolver.delete(deleteUri, null, null)
     }
 
     fun createEvent(idCalendar: Int, beginTime: Calendar, title: String, ): ContentValues {
@@ -60,8 +59,8 @@ class LocalCalendarUtility @Inject constructor
             put(CalendarContract.Events.CALENDAR_ID, idCalendar)
             put(CalendarContract.Events.TITLE, title)
             put(CalendarContract.Events.DESCRIPTION, "added from Habits Tracker")
-            put(CalendarContract.Events.DTSTART, beginTime.getTimeInMillis())
-            put(CalendarContract.Events.DTEND, beginTime.getTimeInMillis())
+            put(CalendarContract.Events.DTSTART, beginTime.timeInMillis)
+            put(CalendarContract.Events.DTEND, beginTime.timeInMillis)
             put(CalendarContract.Events.ALL_DAY, 1)
             put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().id)
         }

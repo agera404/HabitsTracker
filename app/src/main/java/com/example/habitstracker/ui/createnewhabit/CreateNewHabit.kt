@@ -15,18 +15,17 @@ import androidx.navigation.NavController
 import com.example.habitstracker.R
 import com.example.habitstracker.ui.notification.NotificationSettings
 import com.example.habitstracker.ui.notification.NotificationSettingsViewModel
-import com.example.habitstracker.ui.theme.AppTheme
 
 @Composable
 fun CreateNewHabit(navController: NavController) {
-    val viewModel: CreateNewHabitDialogViewModel = viewModel()
+    val habitDialogViewModel: CreateNewHabitDialogViewModel = viewModel()
     var text by remember { mutableStateOf("") }
     var id: Long? by remember {
         mutableStateOf(null)
     }
     val insertHabit: (String) -> Long? = {
         Log.d("dLog","insertHabit($it)")
-        viewModel.insertNewHabit(it)
+        habitDialogViewModel.insertNewHabit(it)
     }
     Dialog(onDismissRequest = { /*TODO*/ }) {
         Surface {
@@ -48,7 +47,7 @@ fun CreateNewHabit(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    val viewModel: NotificationSettingsViewModel =  hiltViewModel()
+                    val notificationViewModel: NotificationSettingsViewModel =  hiltViewModel()
                     NotificationSettings(
                         selectedTime = null,
                         { time: String ->
@@ -57,7 +56,7 @@ fun CreateNewHabit(navController: NavController) {
                             }
                             if (id!=null){
                                 Log.d("dLog","if (id!=null)")
-                                viewModel.setNotification(time, id!!)
+                                notificationViewModel.setNotification(time, id!!)
                             }
                         }
                     )
@@ -73,7 +72,7 @@ fun CreateNewHabit(navController: NavController) {
                     Button(onClick = {
                         if (text.isNotBlank()){
                             if (id == null){
-                                id = viewModel.insertNewHabit(name = text)
+                                id = habitDialogViewModel.insertNewHabit(name = text)
                             }
                             navController.popBackStack()
                         }

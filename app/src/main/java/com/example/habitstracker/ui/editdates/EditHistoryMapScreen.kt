@@ -70,7 +70,7 @@ fun EditHistoryMapScreen(navController: NavController, id: String?) {
                                 { date: LocalDate ->
                                     Log.d("dLog", "changeDataStatus("+date.toString()+")")
                                     viewModel.changeDataStatus(date)
-                                }, isLarge = true, navController, date
+                                }, isLarge = true, date
                             )
                         }
                     }

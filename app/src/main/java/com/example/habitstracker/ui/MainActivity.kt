@@ -90,7 +90,8 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         navController.popBackStack()
         if (doubleBackToExitPressedOnce) {
-            super.onBackPressed()
+            finish()
+            //super.onBackPressed()
             return
         }
 

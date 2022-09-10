@@ -47,7 +47,8 @@ class MainViewModel @Inject constructor(private val ird: InsertRemoveDate) :
             SharingStarted.WhileSubscribed(10000), null
         )
         viewModelScope.launch {
-            _habitsList = stateIn.collect { list ->
+            //_habitsList =
+                stateIn.collect { list ->
                 if (list != null) {
                     habitsListState.clear()
                     habitsListState.addAll(list)

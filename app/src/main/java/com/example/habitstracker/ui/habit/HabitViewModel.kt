@@ -79,12 +79,10 @@ class HabitViewModel @Inject constructor(private val ird: InsertRemoveDate,
         viewModelScope.launch {
             stateIn.collect() {
                 if (it != null) {
-                    if (it!=null){
-                        _habitWDate.value = it
-                        _habitName.value = it.habitName
-                        _listOfDates.clear()
-                        _listOfDates.addAll(it.listOfDates)
-                    }
+                    _habitWDate.value = it
+                    _habitName.value = it.habitName
+                    _listOfDates.clear()
+                    _listOfDates.addAll(it.listOfDates)
                 }
             }
         }

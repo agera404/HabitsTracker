@@ -46,15 +46,9 @@ class EditDatesViewModel @Inject constructor(private val ird: InsertRemoveDate,)
     }
 
     fun changeDataStatus(date: LocalDate){
-        if (idHabit!=null){
-            if (isDateExist(idHabit, date)){
-                Log.d("dLog","removeDate(idHabit, date) "+date.toString())
-                removeDate(idHabit, date)
-            }else{
-                Log.d("dLog","insertDate(idHabit, date) "+date.toString())
-                insertDate(idHabit, date)
-                setItem(idHabit)
-            }
+        if (isDateExist(idHabit, date)){
+            Log.d("dLog","removeDate(idHabit, date) "+date.toString())
+            removeDate(idHabit, date)
         }
     }
 

@@ -171,7 +171,7 @@ fun HabitContent(viewModel: HabitViewModel, navController: NavController) {
                     { date: LocalDate ->
                         viewModel.changeDataStatus(date)
                     },
-                    false, navController
+                    false
                 )
             }
         }
@@ -184,7 +184,6 @@ fun ShowCanvas(
     list: List<LocalDate>,
     passDate: (date: LocalDate) -> Unit,
     isLarge: Boolean,
-    navController: NavController,
     date: LocalDate = LocalDate.now()
 ) {
     var action by remember {
@@ -202,7 +201,7 @@ fun ShowCanvas(
                     val y = it.y
                     pairXY = Pair(x, y)
                     action = true
-                } else false
+                }
             }
             true
         }) {

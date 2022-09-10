@@ -43,7 +43,7 @@ class NotificationSettingsViewModel @Inject constructor
         Log.d("dLog","setNotification($time, $id)")
         val entity = getItem(id)
         val localTime = LocalTime.parse(time, DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
-        var localDateTime = LocalDateTime.now()
+        val localDateTime:LocalDateTime
         if (localTime.isAfter(LocalTime.now())){
             localDateTime = localTime.atDate(LocalDate.now())
         }else{

@@ -1,5 +1,7 @@
 package com.example.habitstracker.ui.adapters
 
+import android.app.Application
+import android.content.res.Resources
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -75,7 +77,7 @@ class HabitViewHolder(private val _binding: HabitItemBinding) : RecyclerView.Vie
     private fun setBackgroundForImageView(view: ImageView, flag: Boolean) {
         val drawable_id =
             if (flag) R.drawable.ic_baseline_done_24 else R.drawable.ic_baseline_close_24
-        view.foreground = this.itemView.resources.getDrawable(drawable_id)
+        view.foreground = this.itemView.resources.getDrawable(drawable_id, null)
         //view.setBackgroundColor(this.itemView.resources.getColor(R.color.md_theme_light_background))
     }
 

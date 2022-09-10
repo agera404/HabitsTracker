@@ -17,7 +17,7 @@ fun NavGraph (navController: NavHostController){
         navController = navController,
         startDestination = Screens.Main.route)
     {
-        composable(route = Screens.CreateNewHabit.route){ backStackArgument ->
+        composable(route = Screens.CreateNewHabit.route){ _ ->
             CreateNewHabit(navController)}
         composable(route = Screens.Main.route){
             Main(navController)
