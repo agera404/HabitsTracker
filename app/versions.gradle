@@ -5,14 +5,15 @@ ext {
     def versions_compose = "1.2.1"
     libs += [
         compose: ["androidx.compose.runtime:runtime:$versions_compose",
-                   "androidx.compose.ui:ui:$versions_compose",
-                   "androidx.compose.foundation:foundation:$versions_compose",
-                   "androidx.compose.foundation:foundation-layout:$versions_compose",
-                   "androidx.compose.material:material:$versions_compose",
-                   "androidx.compose.runtime:runtime-livedata:$versions_compose",
-                   "androidx.compose.ui:ui-tooling:$versions_compose",
-                   "androidx.compose.ui:ui-tooling-preview:$versions_compose",
-                   "androidx.compose.ui:ui-viewbinding:$versions_compose"
+                  "androidx.compose.ui:ui:$versions_compose",
+                  "androidx.compose.foundation:foundation:$versions_compose",
+                  "androidx.compose.foundation:foundation-layout:$versions_compose",
+                  "androidx.compose.material:material:$versions_compose",
+                  "androidx.compose.runtime:runtime-livedata:$versions_compose",
+                  "androidx.compose.ui:ui-tooling:$versions_compose",
+                  "androidx.compose.ui:ui-tooling-preview:$versions_compose",
+                  "androidx.compose.ui:ui-viewbinding:$versions_compose",
+                  "androidx.activity:activity-compose:1.5.1"
         ]
     ]
 
@@ -20,7 +21,8 @@ ext {
     libs += [
         navigation: [
                 "androidx.navigation:navigation-fragment-ktx:$versions_navigation",
-                "androidx.navigation:navigation-ui-ktx:$versions_navigation"
+                "androidx.navigation:navigation-ui-ktx:$versions_navigation",
+                "androidx.navigation:navigation-compose:$versions_navigation"
         ]
     ]
 
