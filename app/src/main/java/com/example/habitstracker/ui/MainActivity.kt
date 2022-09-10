@@ -9,15 +9,19 @@ import android.os.Looper
 import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.MaterialTheme
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
-import com.example.habitstracker.EventObserver
-import com.example.habitstracker.R
+import com.example.habitstracker.data.database.AppDatabase
+import com.example.habitstracker.data.repositories.HabitsRepository
 import com.example.habitstracker.databinding.ActivityMainBinding
+import com.example.habitstracker.ui.main.MainActivityScreen
+import com.example.habitstracker.ui.theme.AppTheme
+import com.example.habitstracker.ui.theme.DarkColors
+import com.example.habitstracker.ui.theme.LightColors
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,7 +33,13 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewModel: ActivityViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContent{
+            AppTheme() {
+                MainActivityScreen()
+            }
+        }
+        HabitsRepository.db = AppDatabase.getInstance(this.applicationContext)
+        /*binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -60,8 +70,8 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
-        ignoreBatteryOptimization()
+*/
+        //ignoreBatteryOptimization()
 
     }
     private fun ignoreBatteryOptimization() {

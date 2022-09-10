@@ -7,13 +7,13 @@ import java.time.LocalDate
 
 
 data class HabitWDate(
-    @Embedded var habitEntity: HabitEntity,
+    @Embedded val habitEntity: HabitEntity,
     @Relation(
         entity = DateEntity::class,
         parentColumn = "id_habit",
         entityColumn = "id_habit"
     )
-    private var dates: List<DateEntity>) {
+    private val dates: List<DateEntity>) {
     val habitId: Long?
     get() {
         return habitEntity.id_habit

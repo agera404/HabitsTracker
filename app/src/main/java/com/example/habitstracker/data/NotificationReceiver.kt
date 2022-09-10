@@ -12,7 +12,6 @@ class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         val info = intent?.getBundleExtra("Bundle")?.getParcelable<NotificationData>("Notification_Info")
 
-        Log.d("dLog", "info " + (info?.title ?: "is null"))
         val nintent = Intent(context, NotificationIntentService::class.java)
         val bundle = Bundle()
         bundle.putParcelable("Notification_Info", info)

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DateDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(date: DateEntity)
 
     @Update
@@ -17,8 +17,11 @@ interface DateDao {
     @Delete
     abstract fun delete(date: DateEntity)
 
-    @Query("SELECT * FROM DateEntity WHERE date = :mdate AND id_habit = :idhabit")
-    fun findDateByDate(mdate:String, idhabit: Long): List<DateEntity>
+    @Query("SELECT * FROM DateEntity WHERE date = :date AND id_habit = :idhabit")
+    fun getDateEntity(date:String, idhabit: Long): DateEntity?
+
+    @Query("SELECT * FROM DateEntity WHERE date = :date AND id_habit = :idhabit")
+    fun findDateByDate(date:String, idhabit: Long): List<DateEntity>
 
     @Transaction
     @Query("SELECT * FROM habits")

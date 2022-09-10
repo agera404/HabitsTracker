@@ -4,10 +4,12 @@
     <string name="save_button">Save</string>
     <string name="dont_add_to_calendar_button">Don\'t add to calendar</string>
     <string name="history_map">History</string>
-    <string name="set_notify_checkbox">set notification</string>
+    <string name="set_notify_checkbox">Turn on reminder</string>
     <string name="error">Error!</string>
     <string name="no_permission">No permission</string>
     <string name="click_back_again">Please click BACK again to exit</string>
+    <string name="example_of_habit_name">e.g Exercise</string>
+    <string name="name">Name</string>
     <string-array name="notification_array">
         <item>Daily</item>
         <item>Custom</item>

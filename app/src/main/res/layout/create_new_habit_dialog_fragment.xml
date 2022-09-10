@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp" android:layout_height="wrap_content"
-    android:layout_gravity="center" android:orientation="vertical"
-    tools:context=".ui.createnewhabit.CreateNewHabitDialogFragment"
-    android:padding="5dp">
-    <LinearLayout
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<FrameLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    >
+
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
+        <EditText
 
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/name_edittext"
-        />
+            android:id="@+id/name_edittext"
+            style="@style/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/example_of_habit_name" />
         <FrameLayout
+            android:layout_marginTop="10dp"
             android:id="@+id/notification_fragment_container_2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     <RelativeLayout
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -31,7 +36,7 @@
             android:text="@string/back_button"
             android:textAllCaps="true"
             android:layout_margin="0dp"
-            style="@style/buttonStyle"
+            style="@style/buttonStyle2"
             android:layout_alignParentLeft="true"
             android:id="@+id/back_button"/>
 
@@ -44,6 +49,11 @@
             style="@style/buttonStyle"
             android:id="@+id/save_button"/>
     </RelativeLayout>
-    </LinearLayout>
+    </LinearLayout>-->
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/createNewHabitComposeView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </FrameLayout>
+</layout>

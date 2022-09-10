@@ -11,7 +11,8 @@ import java.time.format.DateTimeFormatter
         parentColumns = arrayOf("id_habit"),
         childColumns = arrayOf("id_habit"),
         onDelete = CASCADE)),
-        indices = [Index(value = arrayOf("date","id_habit"), unique = true)])
+        //indices = [Index(value = arrayOf("date","id_habit"), unique = true)]
+        )
 class DateEntity(
     @PrimaryKey var id_date: Long? = null,
     @ColumnInfo(name = "date") @TypeConverters(DateConverter::class) var date: LocalDate,

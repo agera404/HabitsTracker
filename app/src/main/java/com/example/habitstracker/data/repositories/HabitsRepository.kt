@@ -1,5 +1,6 @@
 package com.example.habitstracker.data.repositories
 
+import android.util.Log
 import com.example.habitstracker.data.database.AppDatabase
 import com.example.habitstracker.models.*
 import kotlinx.coroutines.*
@@ -10,6 +11,7 @@ object HabitsRepository {
     lateinit var db: AppDatabase
     suspend fun insertDate(idHabit: Long, date: LocalDate) = withContext(Dispatchers.IO + NonCancellable){
         var _date = DateEntity(null, date, idHabit)
+
         db.dateDao().insert(_date)
     }
     suspend fun insertHabit(habitEntity: HabitEntity) = withContext(Dispatchers.IO + NonCancellable){
@@ -44,6 +46,10 @@ object HabitsRepository {
         val result = DateConverter.toString(date)?.let { db.dateDao().findDateByDate(it, idHabit) }
         if (result != null && result.size > 0) return result.first().id_date
         return null
+    }
+
+    fun getDateEntity(date: LocalDate, idHabit: Long): DateEntity?{
+        return db.dateDao().getDateEntity(DateConverter.toString(date)!!,idHabit)
     }
 
     fun getNotificationByHabitId(idHabit: Long): NotificationEntity?{

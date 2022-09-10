@@ -10,12 +10,12 @@ import kotlinx.coroutines.launch
 
 class CreateNewHabitDialogViewModel : ViewModel() {
 
-    fun insertNewHabit(name: String): LiveData<Long> {
+    fun insertNewHabit(name: String): Long? {
         val result = MutableLiveData<Long>()
         viewModelScope.launch {
             val habitEntity: HabitEntity = HabitEntity(null,name)
            result.value = HabitsRepository.insertHabit(habitEntity)
         }
-        return result
+        return result.value
     }
 }

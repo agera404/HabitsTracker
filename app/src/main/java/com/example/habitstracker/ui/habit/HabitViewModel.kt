@@ -1,5 +1,9 @@
 package com.example.habitstracker.ui.habit
 
+import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.habitstracker.models.HabitEntity
 import com.example.habitstracker.models.HabitWDate
@@ -27,6 +31,10 @@ class HabitViewModel @Inject constructor(private val ird: InsertRemoveDate,
         get() {
             return habitWDate.value?.calendarId
         }
+    private var _habitName = mutableStateOf("")
+    val habitName: State<String> = _habitName
+
+
     val calendarName: String?
         get() {
             if (idCalendar!=null){
@@ -40,15 +48,12 @@ class HabitViewModel @Inject constructor(private val ird: InsertRemoveDate,
         get() {
             return habitWDate.value?.habitId
         }
-    val listOfDates: List<LocalDate>
-        get() {
-            if (habitWDate.value?.listOfDates != null)
-                return habitWDate.value?.listOfDates!!
-            return emptyList()
-        }
+
+    private var _listOfDates = mutableStateListOf<LocalDate>()
+    val listOfDates = _listOfDates
 
     fun setHabitName(name: String) {
-        if (habitWDate.value?.habitId != null) {
+        if (habitWDate.value?.habitId != null && name.isNotBlank()) {
             val updatedHabit = HabitEntity(
                 habitWDate.value?.habitId!!,
                 name,
@@ -58,7 +63,6 @@ class HabitViewModel @Inject constructor(private val ird: InsertRemoveDate,
                 HabitsRepository.updateHabit(updatedHabit)
             }
         }
-
     }
 
     fun navigateToEditDates() {
@@ -74,7 +78,14 @@ class HabitViewModel @Inject constructor(private val ird: InsertRemoveDate,
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(10000), null)
         viewModelScope.launch {
             stateIn.collect() {
-                _habitWDate.setValue(it)
+                if (it != null) {
+                    if (it!=null){
+                        _habitWDate.value = it
+                        _habitName.value = it.habitName
+                        _listOfDates.clear()
+                        _listOfDates.addAll(it.listOfDates)
+                    }
+                }
             }
         }
     }
@@ -83,7 +94,9 @@ class HabitViewModel @Inject constructor(private val ird: InsertRemoveDate,
         if (idHabit != null) {
             if (isDateExist(idHabit!!, date)) {
                 removeDate(idHabit!!, date)
+
             } else {
+
                 insertDate(idHabit!!, date)
             }
         }
@@ -91,6 +104,7 @@ class HabitViewModel @Inject constructor(private val ird: InsertRemoveDate,
     }
 
     private fun isDateExist(idHabit: Long, date: LocalDate, ): Boolean {
+
         return ird.isDateExist(idHabit, date)
     }
 
@@ -101,7 +115,7 @@ class HabitViewModel @Inject constructor(private val ird: InsertRemoveDate,
     }
 
     private fun removeDate(idHabit: Long, date: LocalDate) {
-        removeDate(idHabit, date)
+        ird.removeDate(idHabit, date)
     }
 
 }

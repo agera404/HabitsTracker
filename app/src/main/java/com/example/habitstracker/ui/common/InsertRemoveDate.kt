@@ -1,5 +1,6 @@
 package com.example.habitstracker.ui.common
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.habitstracker.data.repositories.HabitsRepository
 import com.example.habitstracker.models.DateConverter
@@ -13,9 +14,10 @@ class InsertRemoveDate @Inject constructor(private val calendarHelper: CalendarW
         return HabitsRepository.isDateExist(date, idHabit)
     }
     suspend fun insertDate(idHabit: Long, date: LocalDate) {
+
         HabitsRepository.insertDate(idHabit, date)
         val habitEntity = HabitsRepository.getHabitById(idHabit)
-        if (habitEntity != null) {
+        if (habitEntity?.calendar_id != null) {
             calendarHelper.writeToCalendar(habitEntity, date)
         }
     }

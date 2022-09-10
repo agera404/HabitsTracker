@@ -17,7 +17,7 @@ class ActivityViewModel(application: Application) : AndroidViewModel(application
 
     private val context = application.applicationContext
     init {
-        HabitsRepository.db = AppDatabase.getInstance(context)
+
     }
 
     private var _dates: MutableLiveData<List<LocalDate>> = MutableLiveData()

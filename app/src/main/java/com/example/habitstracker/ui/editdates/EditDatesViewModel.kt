@@ -1,5 +1,9 @@
 package com.example.habitstracker.ui.editdates
 
+import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.habitstracker.models.HabitWDate
 import com.example.habitstracker.data.repositories.HabitsRepository
@@ -18,10 +22,9 @@ class EditDatesViewModel @Inject constructor(private val ird: InsertRemoveDate,)
     INavigation by NavigationHelper() {
     var idHabit: Long = 0
 
-    val dataSet: List<LocalDate>?
-    get() {
-        return habitWDate.value?.listOfDates
-    }
+    private var _dataSet = mutableStateOf<List<LocalDate>>(listOf())
+    val listOfDates = _dataSet
+
     fun init(idHabit: Long){
         this.idHabit = idHabit
         setItem(idHabit)
@@ -34,7 +37,10 @@ class EditDatesViewModel @Inject constructor(private val ird: InsertRemoveDate,)
         val stateIn = HabitsRepository.getHabitWithDates(id).distinctUntilChanged().stateIn(viewModelScope, SharingStarted.WhileSubscribed(10000),null)
         viewModelScope.launch {
             stateIn.collect(){
-                _habitWDate.setValue(it)
+                if (it != null){
+                    _habitWDate.setValue(it)
+                    _dataSet.value = it.listOfDates
+                }
             }
         }
     }
@@ -42,19 +48,21 @@ class EditDatesViewModel @Inject constructor(private val ird: InsertRemoveDate,)
     fun changeDataStatus(date: LocalDate){
         if (idHabit!=null){
             if (isDateExist(idHabit, date)){
+                Log.d("dLog","removeDate(idHabit, date) "+date.toString())
                 removeDate(idHabit, date)
             }else{
+                Log.d("dLog","insertDate(idHabit, date) "+date.toString())
                 insertDate(idHabit, date)
                 setItem(idHabit)
             }
         }
-
     }
 
     private fun isDateExist(idHabit: Long, date: LocalDate):Boolean{
         return ird.isDateExist(idHabit, date)
     }
     private fun insertDate(idHabit: Long, date: LocalDate){
+
         viewModelScope.launch {
             ird.insertDate(idHabit, date)
         }

@@ -9,9 +9,10 @@
     <string name="error">Ошибка!</string>
     <string name="no_permission">Нет разрешения</string>
     <string name="click_back_again">Нажмите назад еще раз, чтобы выйти</string>
-
+    <string name="example_of_habit_name">например, Тренировка</string>
     <string-array name="notification_array">
         <item>Ежедневно</item>
         <item>Другое</item>
     </string-array>
+    <string name="name">Название</string>
 </resources>
