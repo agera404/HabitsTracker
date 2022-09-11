@@ -1,0 +1,55 @@
+// libs versions
+ext {
+    libs = [:]
+
+    def versions_compose = "1.2.1"
+    libs += [
+        compose: ["androidx.compose.runtime:runtime:$versions_compose",
+                  "androidx.compose.ui:ui:$versions_compose",
+                  "androidx.compose.foundation:foundation:$versions_compose",
+                  "androidx.compose.foundation:foundation-layout:$versions_compose",
+                  "androidx.compose.material:material:$versions_compose",
+                  "androidx.compose.runtime:runtime-livedata:$versions_compose",
+                  "androidx.compose.ui:ui-tooling:$versions_compose",
+                  "androidx.compose.ui:ui-tooling-preview:$versions_compose",
+                  "androidx.compose.ui:ui-viewbinding:$versions_compose",
+                  "androidx.activity:activity-compose:1.5.1"
+        ]
+    ]
+
+    def versions_navigation = "2.5.2"
+    libs += [
+        navigation: [
+                "androidx.navigation:navigation-fragment-ktx:$versions_navigation",
+                "androidx.navigation:navigation-ui-ktx:$versions_navigation",
+                "androidx.navigation:navigation-compose:$versions_navigation"
+        ]
+    ]
+
+    def versions_material = "1.8.0-alpha01"
+    def versions_time_adapter = "1.1.17"
+    libs += [
+        material: [
+                "com.google.android.material:material:$versions_material",
+                "com.google.android.material:compose-theme-adapter:$versions_time_adapter"
+        ]
+    ]
+
+    def versions_lifecycle = "2.5.1"
+    libs += [
+        lifecycle: [
+                "androidx.lifecycle:lifecycle-livedata-ktx:$versions_lifecycle",
+                "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions_lifecycle"
+        ]
+    ]
+
+    def versions_fragment = "1.6.0-alpha02"
+    libs += [
+            fragment: [
+                    "androidx.fragment:fragment:$versions_fragment",
+                    "androidx.fragment:fragment-ktx:$versions_fragment",
+                    "androidx.fragment:fragment-ktx:$versions_fragment"
+            ]
+    ]
+
+}
