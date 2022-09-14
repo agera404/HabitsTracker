@@ -12,12 +12,16 @@ import kotlinx.coroutines.launch
 
 class CreateNewHabitDialogViewModel : ViewModel() {
 
-    fun insertNewHabit(name: String): MutableState<Long?> {
+    private val _id: MutableState<Long?> = mutableStateOf(null)
+    val id: MutableState<Long?>
+        get() = _id
+
+
+    fun insertNewHabit(name: String) {
         val id: MutableState<Long?> = mutableStateOf(null)
         viewModelScope.launch {
             val habitEntity: HabitEntity = HabitEntity(null,name)
-           id.value = HabitsRepository.insertHabit(habitEntity)
+           _id.value = HabitsRepository.insertHabit(habitEntity)
         }
-        return id
     }
 }

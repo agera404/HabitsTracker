@@ -23,20 +23,25 @@ import kotlinx.coroutines.delay
 fun CreateNewHabit(navController: NavController) {
     val habitDialogViewModel: CreateNewHabitDialogViewModel = viewModel()
     var text by remember { mutableStateOf("") }
-    var id: Long? by remember {
-        mutableStateOf(null)
-    }
+    var id = habitDialogViewModel.id
     val notificationViewModel: NotificationSettingsViewModel =  hiltViewModel()
     var time: String by remember {
         mutableStateOf("")
     }
-    val setNotify: (String)-> Unit = { time ->
-            if (id!=null){
-                notificationViewModel.setNotification(time, id!!)
-            }
+    val setNotify: (String)-> Unit = { _time ->
+        if (_time.isNotBlank() && id.value != null){
+            notificationViewModel.setNotification(_time, id.value!!)
+        }
     }
     val insertHabit: (String) -> MutableState<Long?> = {
         habitDialogViewModel.insertNewHabit(it)
+        habitDialogViewModel.id
+    }
+    var isSaveButtonClicked by remember {
+        mutableStateOf(false)
+    }
+    if (id.value != null && isSaveButtonClicked){
+        setNotify(time)
     }
     Dialog(onDismissRequest = { /*TODO*/ }) {
         Surface {
@@ -73,11 +78,12 @@ fun CreateNewHabit(navController: NavController) {
                     OutlinedButton(onClick = { navController.popBackStack() }) {
                         Text(stringResource(id = R.string.back_button))
                     }
+
                     Button(onClick = {
                         if (text.isNotBlank()){
-                            id = insertHabit(text).value
+                            insertHabit(text)
                             if (time.isNotBlank()){
-                                setNotify(time)
+                                isSaveButtonClicked = true
                             }
                             navController.popBackStack()
                         }
