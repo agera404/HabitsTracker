@@ -1,5 +1,7 @@
 package com.example.habitstracker.ui.createnewhabit
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,12 +12,12 @@ import kotlinx.coroutines.launch
 
 class CreateNewHabitDialogViewModel : ViewModel() {
 
-    fun insertNewHabit(name: String): Long? {
-        val result = MutableLiveData<Long>()
+    fun insertNewHabit(name: String): MutableState<Long?> {
+        val id: MutableState<Long?> = mutableStateOf(null)
         viewModelScope.launch {
             val habitEntity: HabitEntity = HabitEntity(null,name)
-           result.value = HabitsRepository.insertHabit(habitEntity)
+           id.value = HabitsRepository.insertHabit(habitEntity)
         }
-        return result.value
+        return id
     }
 }

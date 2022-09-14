@@ -1,6 +1,5 @@
 package com.example.habitstracker.ui.habit
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -9,9 +8,7 @@ import com.example.habitstracker.models.HabitEntity
 import com.example.habitstracker.models.HabitWDate
 import com.example.habitstracker.data.repositories.HabitsRepository
 import com.example.habitstracker.ui.common.InsertRemoveDate
-import com.example.habitstracker.ui.common.interfaces.INavigation
 import com.example.habitstracker.utils.LocalCalendarUtility
-import com.example.habitstracker.viewmodels.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -23,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HabitViewModel @Inject constructor(private val ird: InsertRemoveDate,
                                          private val localCalendarUtility: LocalCalendarUtility) :
-    ViewModel(), INavigation by NavigationHelper() {
+    ViewModel() {
     private var _habitWDate: MutableLiveData<HabitWDate> = MutableLiveData<HabitWDate>()
     var habitWDate: LiveData<HabitWDate> = _habitWDate
 
@@ -63,14 +60,6 @@ class HabitViewModel @Inject constructor(private val ird: InsertRemoveDate,
                 HabitsRepository.updateHabit(updatedHabit)
             }
         }
-    }
-
-    fun navigateToEditDates() {
-        navToEditDatesDialog()
-    }
-
-    fun navigateToShowLocalCalendars() {
-        navToShowLocalCalendars()
     }
 
     fun setItem(id: Long) {

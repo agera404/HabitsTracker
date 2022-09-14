@@ -54,7 +54,6 @@ class LocalCalendarUtility @Inject constructor
     }
 
     fun createEvent(idCalendar: Int, beginTime: Calendar, title: String, ): ContentValues {
-        Log.d("Calendar_debug","Trying to create a new event...")
         return ContentValues().apply{
             put(CalendarContract.Events.CALENDAR_ID, idCalendar)
             put(CalendarContract.Events.TITLE, title)
@@ -67,13 +66,11 @@ class LocalCalendarUtility @Inject constructor
     }
 
     fun addEventToCalendar(event: ContentValues): Long? {
-        Log.d("Calendar_debug","Trying to add a new event...")
         val eventUri: Uri
         eventUri =
             Uri.parse("content://com.android.calendar/events")
         val uri: Uri? = context.contentResolver.insert(eventUri, event)
         val eventId = uri?.lastPathSegment?.toLongOrNull()
-        Log.d("Calendar_debug", "Event id is $eventId")
         return eventId
     }
 

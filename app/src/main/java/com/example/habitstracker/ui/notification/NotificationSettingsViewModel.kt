@@ -10,8 +10,6 @@ import com.example.habitstracker.models.HabitEntity
 import com.example.habitstracker.models.NotificationEntity
 import com.example.habitstracker.data.repositories.HabitsRepository
 import com.example.habitstracker.models.NotificationData
-import com.example.habitstracker.ui.common.interfaces.INavigation
-import com.example.habitstracker.viewmodels.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -24,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationSettingsViewModel @Inject constructor
-    (@ApplicationContext private val context: Context) : ViewModel(), INavigation by NavigationHelper() {
+    (@ApplicationContext private val context: Context) : ViewModel() {
 
     fun getItem(habit_id: Long): HabitEntity? = HabitsRepository.getHabitById(habit_id)
     fun getSelectedTime(id: Long): LocalTime? {
@@ -40,7 +38,6 @@ class NotificationSettingsViewModel @Inject constructor
         return HabitsRepository.getNotificationByHabitId(habit_id)
     }
     fun setNotification(time: String, id: Long){
-        Log.d("dLog","setNotification($time, $id)")
         val entity = getItem(id)
         val localTime = LocalTime.parse(time, DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
         val localDateTime:LocalDateTime
@@ -65,11 +62,9 @@ class NotificationSettingsViewModel @Inject constructor
         }
     }
     fun removeNotificationInfo(habit_id: Long){
-        Log.d("dLog","removeNotificationInfo($habit_id)")
         HabitsRepository.removeNotification(habit_id)
     }
     fun insertOrUpdateNotify(id: Long, time: LocalTime){
-        Log.d("dLog","insertOrUpdateNotify($id, $time")
         HabitsRepository.getNotificationByHabitId(id)?.let { entity ->
             viewModelScope.launch {
                 val updatedEntity = entity.apply { this.time = time.toSecondOfDay().toLong() }

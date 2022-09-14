@@ -1,15 +1,11 @@
 package com.example.habitstracker.ui.main
 
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.*
 import com.example.habitstracker.models.*
 import com.example.habitstracker.data.repositories.HabitsRepository
-import com.example.habitstracker.viewmodels.NavigationHelper
 import com.example.habitstracker.ui.common.InsertRemoveDate
-import com.example.habitstracker.ui.common.interfaces.INavigation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -19,12 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val ird: InsertRemoveDate) :
-    ViewModel(), INavigation by NavigationHelper() {
-    private var _habitsList: MutableLiveData<List<HabitWDate>> = MutableLiveData<List<HabitWDate>>()
-    val habitsList: LiveData<List<HabitWDate>> = _habitsList
-
-    private var _selectedItem: MutableLiveData<HabitWDate> = MutableLiveData<HabitWDate>()
-    var selectedItem: LiveData<HabitWDate> = _selectedItem
+    ViewModel() {
 
     var habitsListState = mutableStateListOf<HabitWDate>()
 
@@ -58,15 +49,17 @@ class MainViewModel @Inject constructor(private val ird: InsertRemoveDate) :
         }
     }
 
-    fun isDateExist(idhabit: Long, date: LocalDate): Boolean {
+    fun isDateExist(idhabit: Long, date: LocalDate): Boolean? {
         if (habitsListState.size > 0){
-            val habitWDate = habitsListState.first { it.habitId == idhabit }
-            if (habitWDate.getDateEntityByDate(date) == null) {
-                return false
+            val habitWDate = habitsListState.firstOrNull { it.habitId == idhabit }
+            if (habitWDate != null) {
+                if (habitWDate.getDateEntityByDate(date) == null) {
+                    return false
+                }
+                return true
             }
-            return true
         }
-        return false
+        return null
     }
 
     fun insertTodayDate(habitEntity: HabitEntity) {
@@ -89,8 +82,4 @@ class MainViewModel @Inject constructor(private val ird: InsertRemoveDate) :
         HabitsRepository.deleteHabit(habitEntity)
     }
 
-    fun navigateToHabitFragment(habitWDate: HabitWDate) {
-        navToHabitFragment()
-        _selectedItem.value = habitWDate
-    }
 }

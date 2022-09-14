@@ -1,15 +1,10 @@
 package com.example.habitstracker.ui.editdates
 
-import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.habitstracker.models.HabitWDate
 import com.example.habitstracker.data.repositories.HabitsRepository
 import com.example.habitstracker.ui.common.InsertRemoveDate
-import com.example.habitstracker.ui.common.interfaces.INavigation
-import com.example.habitstracker.viewmodels.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -18,8 +13,8 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 @HiltViewModel
-class EditDatesViewModel @Inject constructor(private val ird: InsertRemoveDate,) : ViewModel(),
-    INavigation by NavigationHelper() {
+class EditDatesViewModel @Inject constructor(private val ird: InsertRemoveDate,) : ViewModel()
+    {
     var idHabit: Long = 0
 
     private var _dataSet = mutableStateOf<List<LocalDate>>(listOf())
@@ -47,8 +42,10 @@ class EditDatesViewModel @Inject constructor(private val ird: InsertRemoveDate,)
 
     fun changeDataStatus(date: LocalDate){
         if (isDateExist(idHabit, date)){
-            Log.d("dLog","removeDate(idHabit, date) "+date.toString())
             removeDate(idHabit, date)
+        }else{
+            insertDate(idHabit, date)
+            setItem(idHabit)
         }
     }
 

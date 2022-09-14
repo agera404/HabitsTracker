@@ -26,11 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
 
-    lateinit var navHostFragment: NavHostFragment
-    lateinit var navController: NavController
-    lateinit var viewModel: ActivityViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent{
@@ -39,39 +35,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
         HabitsRepository.db = AppDatabase.getInstance(this.applicationContext)
-        /*binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
 
-        viewModel = ViewModelProvider(this).get(ActivityViewModel::class.java)
-
-        viewModel.navigateEvent.observe(this, EventObserver {
-            navController.navigate(it as Int)
-        })
-
-
-
-        navHostFragment= supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
-        navController= navHostFragment.navController
-
-        val toolbar = binding.toolbar
-        val conf = AppBarConfiguration.Builder(navController.graph).build()
-        toolbar.setupWithNavController(navController,conf)
-
-        toolbar.setOnMenuItemClickListener{ menuItem ->
-            when(menuItem.itemId){
-                R.id.add_new_habit -> {
-                    viewModel.navigateToCreateNewHabit()
-                    true
-                }
-                R.id.settings -> {
-                    true
-                }
-                else -> false
-            }
-        }
-*/
-        //ignoreBatteryOptimization()
+            ignoreBatteryOptimization()
 
     }
     private fun ignoreBatteryOptimization() {
@@ -86,21 +51,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    var doubleBackToExitPressedOnce = false;
-    override fun onBackPressed() {
-        navController.popBackStack()
-        if (doubleBackToExitPressedOnce) {
-            finish()
-            //super.onBackPressed()
-            return
-        }
 
-        this.doubleBackToExitPressedOnce = true
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
-
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-            doubleBackToExitPressedOnce = false
-        }, 2000)
-    }
 
 }

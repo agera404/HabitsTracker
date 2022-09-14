@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -15,6 +16,8 @@ import androidx.navigation.NavController
 import com.example.habitstracker.R
 import com.example.habitstracker.ui.notification.NotificationSettings
 import com.example.habitstracker.ui.notification.NotificationSettingsViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 
 @Composable
 fun CreateNewHabit(navController: NavController) {
@@ -23,8 +26,16 @@ fun CreateNewHabit(navController: NavController) {
     var id: Long? by remember {
         mutableStateOf(null)
     }
-    val insertHabit: (String) -> Long? = {
-        Log.d("dLog","insertHabit($it)")
+    val notificationViewModel: NotificationSettingsViewModel =  hiltViewModel()
+    var time: String by remember {
+        mutableStateOf("")
+    }
+    val setNotify: (String)-> Unit = { time ->
+            if (id!=null){
+                notificationViewModel.setNotification(time, id!!)
+            }
+    }
+    val insertHabit: (String) -> MutableState<Long?> = {
         habitDialogViewModel.insertNewHabit(it)
     }
     Dialog(onDismissRequest = { /*TODO*/ }) {
@@ -47,17 +58,10 @@ fun CreateNewHabit(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    val notificationViewModel: NotificationSettingsViewModel =  hiltViewModel()
                     NotificationSettings(
                         selectedTime = null,
-                        { time: String ->
-                            if (id == null && text.isNotBlank()){
-                                id = insertHabit(text)
-                            }
-                            if (id!=null){
-                                Log.d("dLog","if (id!=null)")
-                                notificationViewModel.setNotification(time, id!!)
-                            }
+                        { _time: String ->
+                            time = _time
                         }
                     )
                 }
@@ -71,8 +75,9 @@ fun CreateNewHabit(navController: NavController) {
                     }
                     Button(onClick = {
                         if (text.isNotBlank()){
-                            if (id == null){
-                                id = habitDialogViewModel.insertNewHabit(name = text)
+                            id = insertHabit(text).value
+                            if (time.isNotBlank()){
+                                setNotify(time)
                             }
                             navController.popBackStack()
                         }

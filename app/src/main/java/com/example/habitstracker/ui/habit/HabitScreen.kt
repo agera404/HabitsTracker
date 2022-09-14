@@ -110,11 +110,9 @@ fun HabitContent(viewModel: HabitViewModel, navController: NavController) {
                 ActivityResultContracts.RequestPermission()
             ) { isGranted: Boolean ->
                 if (isGranted) {
-                    Log.d("dLog", "PERMISSION GRANTED")
                     onSelectCalendarButtonClick()
 
                 } else {
-                    Log.d("dLog", "PERMISSION DENIED")
                 }
             }
             onSelectCalendarButtonClick = {

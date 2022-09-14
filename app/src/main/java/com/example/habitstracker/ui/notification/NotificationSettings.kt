@@ -54,7 +54,6 @@ fun NotificationSettings(
     if (viewModel != null && id != null && time.isBlank()) {
         val notifyInfo = viewModel.getNotificationInfo(id)
         if (notifyInfo != null) {
-            Log.d("dLog", "notifyInfo!=null")
             time = LocalTime.ofSecondOfDay(notifyInfo.time)
                 .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
         }
@@ -89,7 +88,6 @@ fun NotificationSettings(
                     }
                 }
             }
-
                 OutlinedTextField(
                     value = text,
                     onValueChange = {
@@ -104,9 +102,7 @@ fun NotificationSettings(
                         }, trailingIcon = {
                         if (text != "Off"){
                             IconButton(onClick = {
-                                Log.d("dLog","IconButton(onClick)")
                                 if (viewModel != null && id != null){
-                                    Log.d("dLog","if (viewModel != null && id != null)")
                                     viewModel.removeNotificationInfo(id)
                                     text = "Off"
                                     time = ""
@@ -117,8 +113,6 @@ fun NotificationSettings(
                         }
                     }
                 )
-
-
             }
 
     }

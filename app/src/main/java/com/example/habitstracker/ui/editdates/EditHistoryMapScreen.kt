@@ -68,7 +68,6 @@ fun EditHistoryMapScreen(navController: NavController, id: String?) {
                             ShowCanvas(
                                 list = _list,
                                 { date: LocalDate ->
-                                    Log.d("dLog", "changeDataStatus("+date.toString()+")")
                                     viewModel.changeDataStatus(date)
                                 }, isLarge = true, date
                             )
