@@ -31,7 +31,6 @@ class HabitViewModel @Inject constructor(private val ird: InsertRemoveDate,
     private var _habitName = mutableStateOf("")
     val habitName: State<String> = _habitName
 
-
     val calendarName: String?
         get() {
             if (idCalendar!=null){

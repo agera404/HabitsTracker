@@ -10,6 +10,7 @@
     <string name="click_back_again">Please click BACK again to exit</string>
     <string name="example_of_habit_name">e.g Exercise</string>
     <string name="name">Name</string>
+    <string name="require_permission">You should give permissions for this function!</string>
     <string-array name="notification_array">
         <item>Daily</item>
         <item>Custom</item>

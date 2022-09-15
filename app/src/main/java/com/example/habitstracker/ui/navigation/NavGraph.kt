@@ -26,7 +26,7 @@ fun NavGraph (navController: NavHostController){
             Habit(navController, backStackArgument.arguments?.getString("habitId"))
         }
         composable(Screens.EditHistoryMap.route+"/{habitId}"){ backStackArgument ->
-            EditHistoryMapScreen(navController = navController, id = backStackArgument.arguments?.getString("habitId"))
+            EditHistoryMapScreen(navController = navController, backStackArgument.arguments?.getString("habitId"))
         }
         composable(Screens.ShowLocalCalendars.route+"/{habitId}"){backStackArgument ->
             ShowLocalCalendars(navController,id=backStackArgument.arguments?.getString("habitId"))

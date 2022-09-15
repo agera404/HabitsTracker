@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.util.Log
 import android.view.MotionEvent
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
@@ -58,6 +59,7 @@ fun Habit(navController: NavController, idStr: String?) {
 @Composable
 fun HabitContent(viewModel: HabitViewModel, navController: NavController) {
     val context = LocalContext.current
+    var requirePermissionString = stringResource(id = R.string.require_permission)
     Surface(
         Modifier
             .fillMaxWidth()
@@ -111,8 +113,8 @@ fun HabitContent(viewModel: HabitViewModel, navController: NavController) {
             ) { isGranted: Boolean ->
                 if (isGranted) {
                     onSelectCalendarButtonClick()
-
                 } else {
+                    Toast.makeText(context, requirePermissionString, Toast.LENGTH_LONG)
                 }
             }
             onSelectCalendarButtonClick = {
@@ -163,9 +165,8 @@ fun HabitContent(viewModel: HabitViewModel, navController: NavController) {
             //history map
             Row(Modifier.fillMaxWidth()) {
                 //canvas
-                var habitWDate = viewModel.habitWDate.observeAsState()
                 ShowCanvas(
-                    list = habitWDate.value?.listOfDates ?: listOf(),
+                    list = viewModel.listOfDates ?: listOf(),
                     { date: LocalDate ->
                         viewModel.changeDataStatus(date)
                     },

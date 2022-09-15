@@ -17,24 +17,20 @@ class EditDatesViewModel @Inject constructor(private val ird: InsertRemoveDate,)
     {
     var idHabit: Long = 0
 
-    private var _dataSet = mutableStateOf<List<LocalDate>>(listOf())
-    val listOfDates = _dataSet
+    private var _listOfDates = mutableStateOf<List<LocalDate>>(listOf())
+    val listOfDates = _listOfDates
 
     fun init(idHabit: Long){
         this.idHabit = idHabit
         setItem(idHabit)
     }
 
-    private var _habitWDate: MutableLiveData<HabitWDate> = MutableLiveData<HabitWDate>()
-    var habitWDate: LiveData<HabitWDate> = _habitWDate
-
-    fun setItem(id: Long) {
+    private fun setItem(id: Long) {
         val stateIn = HabitsRepository.getHabitWithDates(id).distinctUntilChanged().stateIn(viewModelScope, SharingStarted.WhileSubscribed(10000),null)
         viewModelScope.launch {
             stateIn.collect(){
                 if (it != null){
-                    _habitWDate.setValue(it)
-                    _dataSet.value = it.listOfDates
+                    _listOfDates.value = it.listOfDates
                 }
             }
         }

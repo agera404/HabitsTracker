@@ -16,7 +16,6 @@ class CreateNewHabitDialogViewModel : ViewModel() {
     val id: MutableState<Long?>
         get() = _id
 
-
     fun insertNewHabit(name: String) {
         val id: MutableState<Long?> = mutableStateOf(null)
         viewModelScope.launch {

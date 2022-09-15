@@ -1,12 +1,10 @@
 package com.example.habitstracker.ui.createnewhabit
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -16,13 +14,11 @@ import androidx.navigation.NavController
 import com.example.habitstracker.R
 import com.example.habitstracker.ui.notification.NotificationSettings
 import com.example.habitstracker.ui.notification.NotificationSettingsViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 
 @Composable
 fun CreateNewHabit(navController: NavController) {
     val habitDialogViewModel: CreateNewHabitDialogViewModel = viewModel()
-    var text by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
     var id = habitDialogViewModel.id
     val notificationViewModel: NotificationSettingsViewModel =  hiltViewModel()
     var time: String by remember {
@@ -50,9 +46,10 @@ fun CreateNewHabit(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    // for name of habit
                     OutlinedTextField(
-                        value = text, modifier = Modifier.fillMaxWidth(),
-                        onValueChange = { text = it },
+                        value = name, modifier = Modifier.fillMaxWidth(),
+                        onValueChange = { name = it },
                         label = { Text(stringResource(id = R.string.name)) },
                         placeholder = {Text(text = stringResource(id = R.string.example_of_habit_name))}
                     )
@@ -63,6 +60,7 @@ fun CreateNewHabit(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
+                    // notification field
                     NotificationSettings(
                         selectedTime = null,
                         { _time: String ->
@@ -75,13 +73,14 @@ fun CreateNewHabit(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()) {
 
+                    //back button
                     OutlinedButton(onClick = { navController.popBackStack() }) {
                         Text(stringResource(id = R.string.back_button))
                     }
-
+                    //save button
                     Button(onClick = {
-                        if (text.isNotBlank()){
-                            insertHabit(text)
+                        if (name.isNotBlank()){
+                            insertHabit(name)
                             if (time.isNotBlank()){
                                 isSaveButtonClicked = true
                             }
