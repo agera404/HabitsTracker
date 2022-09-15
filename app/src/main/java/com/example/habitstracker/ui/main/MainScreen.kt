@@ -38,7 +38,6 @@ fun Main(navController: NavController) {
     // Action on swipe card habit
     val dismissAction: (HabitWDate) -> Unit = {
         viewModel.deleteHabit(it.habitEntity)
-        habits.remove(it)
     }
 
     // Action on click card habit
@@ -70,13 +69,9 @@ fun Main(navController: NavController) {
 
     // Main block view
     Scaffold(topBar = { MainToolBar(navController = navController) }, content = {
-        Surface(
-            modifier =
-            Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(it)
-        ) {
+        Surface(Modifier.fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(it)) {
             LazyColumn() {
                 // Create view on all habits
                 items(habits) { item ->
@@ -121,7 +116,7 @@ fun CardView(item: HabitWDate,
             for (data in listData) {
                 Column(modifier = Modifier.weight(1f),
                        horizontalAlignment = Alignment.CenterHorizontally) {
-                    OldDaysView(data, getResID(item, data))
+                    PastDaysView(data, getResID(item, data))
                 }
             }
 
@@ -186,7 +181,7 @@ fun SwipeCardView(item: HabitWDate,
 
 //Drawable old day
 @Composable
-fun OldDaysView(day: LocalDate, resourceId: Int?) {
+fun PastDaysView(day: LocalDate, resourceId: Int?) {
     if (resourceId == null) return
     Column(Modifier.padding(top = 0.dp)) {
         Text(text = day.dayOfWeek.name.substring(0..2), fontSize = 7.sp)
