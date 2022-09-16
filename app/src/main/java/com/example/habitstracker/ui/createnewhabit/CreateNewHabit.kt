@@ -1,10 +1,16 @@
 package com.example.habitstracker.ui.createnewhabit
 
+import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -29,16 +35,29 @@ fun CreateNewHabit(navController: NavController) {
             notificationViewModel.setNotification(_time, id.value!!)
         }
     }
-    val insertHabit: (String) -> MutableState<Long?> = {
+    val insertHabit: (String) -> Unit = {
         habitDialogViewModel.insertNewHabit(it)
-        habitDialogViewModel.id
     }
     var isSaveButtonClicked by remember {
         mutableStateOf(false)
     }
-    if (id.value != null && isSaveButtonClicked){
-        setNotify(time)
+    var isInsertError by remember {
+        mutableStateOf(false)
     }
+    val placeholderForName = stringResource(id = R.string.example_of_habit_name)
+    val labelForName = stringResource(id = R.string.name)
+    if (id.value != null && isSaveButtonClicked){
+        isInsertError = false
+        if (time.isNotBlank()){
+            setNotify(time)
+        }
+        navController.popBackStack()
+    }else if (isSaveButtonClicked && id.value == null){
+        Toast.makeText(LocalContext.current, stringResource(id = R.string.error), Toast.LENGTH_SHORT)
+        isInsertError = true
+        isSaveButtonClicked = false
+    }
+
     Dialog(onDismissRequest = { /*TODO*/ }) {
         Surface {
             Column(Modifier.padding(15.dp)) {
@@ -48,10 +67,14 @@ fun CreateNewHabit(navController: NavController) {
                 ) {
                     // for name of habit
                     OutlinedTextField(
-                        value = name, modifier = Modifier.fillMaxWidth(),
+                        value = name,
+                        modifier = Modifier.fillMaxWidth(),
                         onValueChange = { name = it },
-                        label = { Text(stringResource(id = R.string.name)) },
-                        placeholder = {Text(text = stringResource(id = R.string.example_of_habit_name))}
+                        label = { Text(labelForName) },
+                        placeholder = {Text(text = placeholderForName)},
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            errorBorderColor = MaterialTheme.colors.error
+                        ), isError = isInsertError
                     )
                 }
                 Row(
@@ -81,10 +104,7 @@ fun CreateNewHabit(navController: NavController) {
                     Button(onClick = {
                         if (name.isNotBlank()){
                             insertHabit(name)
-                            if (time.isNotBlank()){
-                                isSaveButtonClicked = true
-                            }
-                            navController.popBackStack()
+                            isSaveButtonClicked = true
                         }
                     }) {
                         Text(stringResource(id = R.string.save_button))

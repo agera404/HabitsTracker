@@ -5,6 +5,7 @@ import com.example.habitstracker.data.database.AppDatabase
 import com.example.habitstracker.models.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import java.lang.Exception
 import java.time.LocalDate
 
 object HabitsRepository {
@@ -15,7 +16,11 @@ object HabitsRepository {
         db.dateDao().insert(_date)
     }
     suspend fun insertHabit(habitEntity: HabitEntity) = withContext(Dispatchers.IO + NonCancellable){
-        db.habitDao().insert(habitEntity)
+        try {
+            return@withContext db.habitDao().insert(habitEntity)
+        }catch (e: Exception){
+            return@withContext null
+        }
     }
     fun deleteHabit(habitEntity: HabitEntity){
         db.habitDao().delete(habitEntity)
