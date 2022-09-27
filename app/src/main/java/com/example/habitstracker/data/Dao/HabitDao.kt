@@ -6,7 +6,7 @@ import com.example.habitstracker.models.HabitEntity
 @Dao
 interface HabitDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insert(habitEntity: HabitEntity): Long
+    suspend fun insert(habitEntity: HabitEntity): Long?
 
     @Update
     suspend fun update(habitEntity: HabitEntity)

@@ -1,10 +1,16 @@
 package com.example.habitstracker.ui.createnewhabit
 
+import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -12,14 +18,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.habitstracker.R
+import com.example.habitstracker.ui.navigation.Screens
 import com.example.habitstracker.ui.notification.NotificationSettings
 import com.example.habitstracker.ui.notification.NotificationSettingsViewModel
 
 @Composable
 fun CreateNewHabit(navController: NavController) {
     val habitDialogViewModel: CreateNewHabitDialogViewModel = viewModel()
+    var openDialog by remember {
+        mutableStateOf(true)
+    }
     var name by remember { mutableStateOf("") }
-    var id = habitDialogViewModel.id
+    val id = habitDialogViewModel.id
     val notificationViewModel: NotificationSettingsViewModel =  hiltViewModel()
     var time: String by remember {
         mutableStateOf("")
@@ -29,69 +39,93 @@ fun CreateNewHabit(navController: NavController) {
             notificationViewModel.setNotification(_time, id.value!!)
         }
     }
-    val insertHabit: (String) -> MutableState<Long?> = {
+    val insertHabit: (String) -> Unit = {
         habitDialogViewModel.insertNewHabit(it)
-        habitDialogViewModel.id
     }
     var isSaveButtonClicked by remember {
         mutableStateOf(false)
     }
-    if (id.value != null && isSaveButtonClicked){
-        setNotify(time)
+    var isInsertError by remember {
+        mutableStateOf(false)
     }
-    Dialog(onDismissRequest = { /*TODO*/ }) {
-        Surface {
-            Column(Modifier.padding(15.dp)) {
-                Row(horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    // for name of habit
-                    OutlinedTextField(
-                        value = name, modifier = Modifier.fillMaxWidth(),
-                        onValueChange = { name = it },
-                        label = { Text(stringResource(id = R.string.name)) },
-                        placeholder = {Text(text = stringResource(id = R.string.example_of_habit_name))}
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    // notification field
-                    NotificationSettings(
-                        selectedTime = null,
-                        { _time: String ->
-                            time = _time
-                        }
-                    )
-                }
-                Row(horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()) {
-
-                    //back button
-                    OutlinedButton(onClick = { navController.popBackStack() }) {
-                        Text(stringResource(id = R.string.back_button))
+    val placeholderForName = stringResource(id = R.string.example_of_habit_name)
+    val labelForName = stringResource(id = R.string.name)
+    if (isSaveButtonClicked){
+        if (id.value == null){
+            isInsertError = true
+            //Toast.makeText(LocalContext.current, stringResource(id = R.string.error), Toast.LENGTH_SHORT).show()
+        }else if (id.value != null){
+            if (time.isNotBlank() && !isInsertError){
+                setNotify(time)
+            }
+            openDialog = false
+        }
+    }
+    if (openDialog){
+        Dialog(onDismissRequest = {
+            openDialog = false
+        }) {
+            Surface {
+                Column(Modifier.padding(15.dp)) {
+                    Row(horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        // for name of habit
+                        OutlinedTextField(
+                            value = name,
+                            modifier = Modifier.fillMaxWidth(),
+                            onValueChange = {
+                                name = it
+                                isInsertError = false
+                                isSaveButtonClicked = false
+                            },
+                            label = { Text(labelForName) },
+                            placeholder = {Text(text = placeholderForName)},
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                errorBorderColor = MaterialTheme.colors.error
+                            ), isError = isInsertError
+                        )
                     }
-                    //save button
-                    Button(onClick = {
-                        if (name.isNotBlank()){
-                            insertHabit(name)
-                            if (time.isNotBlank()){
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        // notification field
+                        NotificationSettings(
+                            selectedTime = null,
+                            { _time: String ->
+                                time = _time
+                            }
+                        )
+                    }
+                    Row(horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()) {
+
+                        //back button
+                        OutlinedButton(onClick = { navController.popBackStack() }) {
+                            Text(stringResource(id = R.string.back_button))
+                        }
+                        //save button
+                        Button(onClick = {
+                            if (name.isNotBlank()){
+                                insertHabit(name)
                                 isSaveButtonClicked = true
                             }
-                            navController.popBackStack()
+                        }) {
+                            Text(stringResource(id = R.string.save_button))
                         }
-                    }) {
-                        Text(stringResource(id = R.string.save_button))
                     }
                 }
             }
-        }
 
+        }
+    }else{
+        navController.navigateUp()
     }
+
 }

@@ -5,12 +5,13 @@ import com.example.habitstracker.data.database.AppDatabase
 import com.example.habitstracker.models.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import java.lang.Exception
 import java.time.LocalDate
 
 object HabitsRepository {
     lateinit var db: AppDatabase
     suspend fun insertDate(idHabit: Long, date: LocalDate) = withContext(Dispatchers.IO + NonCancellable){
-        var _date = DateEntity(null, date, idHabit)
+        val _date = DateEntity(null, date, idHabit)
 
         db.dateDao().insert(_date)
     }

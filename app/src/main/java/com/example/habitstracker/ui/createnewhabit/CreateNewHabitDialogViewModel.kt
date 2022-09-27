@@ -17,10 +17,13 @@ class CreateNewHabitDialogViewModel : ViewModel() {
         get() = _id
 
     fun insertNewHabit(name: String) {
-        val id: MutableState<Long?> = mutableStateOf(null)
         viewModelScope.launch {
-            val habitEntity: HabitEntity = HabitEntity(null,name)
-           _id.value = HabitsRepository.insertHabit(habitEntity)
+            val habitEntity = HabitEntity(null,name)
+            try {
+                _id.value = HabitsRepository.insertHabit(habitEntity)
+            }catch (e:Exception){
+                _id.value = null   
+            }
         }
     }
 }
