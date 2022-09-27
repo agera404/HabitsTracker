@@ -18,14 +18,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.habitstracker.R
+import com.example.habitstracker.ui.navigation.Screens
 import com.example.habitstracker.ui.notification.NotificationSettings
 import com.example.habitstracker.ui.notification.NotificationSettingsViewModel
 
 @Composable
 fun CreateNewHabit(navController: NavController) {
     val habitDialogViewModel: CreateNewHabitDialogViewModel = viewModel()
+    var openDialog by remember {
+        mutableStateOf(true)
+    }
     var name by remember { mutableStateOf("") }
-    var id = habitDialogViewModel.id
+    val id = habitDialogViewModel.id
     val notificationViewModel: NotificationSettingsViewModel =  hiltViewModel()
     var time: String by remember {
         mutableStateOf("")
@@ -46,72 +50,82 @@ fun CreateNewHabit(navController: NavController) {
     }
     val placeholderForName = stringResource(id = R.string.example_of_habit_name)
     val labelForName = stringResource(id = R.string.name)
-    if (id.value != null && isSaveButtonClicked){
-        isInsertError = false
-        if (time.isNotBlank()){
-            setNotify(time)
+    if (isSaveButtonClicked){
+        if (id.value == null){
+            isInsertError = true
+            //Toast.makeText(LocalContext.current, stringResource(id = R.string.error), Toast.LENGTH_SHORT).show()
+        }else if (id.value != null){
+            if (time.isNotBlank() && !isInsertError){
+                setNotify(time)
+            }
+            openDialog = false
         }
-        navController.popBackStack()
-    }else if (isSaveButtonClicked && id.value == null){
-        Toast.makeText(LocalContext.current, stringResource(id = R.string.error), Toast.LENGTH_SHORT)
-        isInsertError = true
-        isSaveButtonClicked = false
     }
-
-    Dialog(onDismissRequest = { /*TODO*/ }) {
-        Surface {
-            Column(Modifier.padding(15.dp)) {
-                Row(horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    // for name of habit
-                    OutlinedTextField(
-                        value = name,
-                        modifier = Modifier.fillMaxWidth(),
-                        onValueChange = { name = it },
-                        label = { Text(labelForName) },
-                        placeholder = {Text(text = placeholderForName)},
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            errorBorderColor = MaterialTheme.colors.error
-                        ), isError = isInsertError
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    // notification field
-                    NotificationSettings(
-                        selectedTime = null,
-                        { _time: String ->
-                            time = _time
-                        }
-                    )
-                }
-                Row(horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()) {
-
-                    //back button
-                    OutlinedButton(onClick = { navController.popBackStack() }) {
-                        Text(stringResource(id = R.string.back_button))
+    if (openDialog){
+        Dialog(onDismissRequest = {
+            openDialog = false
+        }) {
+            Surface {
+                Column(Modifier.padding(15.dp)) {
+                    Row(horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        // for name of habit
+                        OutlinedTextField(
+                            value = name,
+                            modifier = Modifier.fillMaxWidth(),
+                            onValueChange = {
+                                name = it
+                                isInsertError = false
+                                isSaveButtonClicked = false
+                            },
+                            label = { Text(labelForName) },
+                            placeholder = {Text(text = placeholderForName)},
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                errorBorderColor = MaterialTheme.colors.error
+                            ), isError = isInsertError
+                        )
                     }
-                    //save button
-                    Button(onClick = {
-                        if (name.isNotBlank()){
-                            insertHabit(name)
-                            isSaveButtonClicked = true
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        // notification field
+                        NotificationSettings(
+                            selectedTime = null,
+                            { _time: String ->
+                                time = _time
+                            }
+                        )
+                    }
+                    Row(horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()) {
+
+                        //back button
+                        OutlinedButton(onClick = { navController.popBackStack() }) {
+                            Text(stringResource(id = R.string.back_button))
                         }
-                    }) {
-                        Text(stringResource(id = R.string.save_button))
+                        //save button
+                        Button(onClick = {
+                            if (name.isNotBlank()){
+                                insertHabit(name)
+                                isSaveButtonClicked = true
+                            }
+                        }) {
+                            Text(stringResource(id = R.string.save_button))
+                        }
                     }
                 }
             }
-        }
 
+        }
+    }else{
+        navController.navigateUp()
     }
+
 }

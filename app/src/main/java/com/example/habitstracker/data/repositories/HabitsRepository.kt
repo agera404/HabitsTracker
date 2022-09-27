@@ -11,16 +11,12 @@ import java.time.LocalDate
 object HabitsRepository {
     lateinit var db: AppDatabase
     suspend fun insertDate(idHabit: Long, date: LocalDate) = withContext(Dispatchers.IO + NonCancellable){
-        var _date = DateEntity(null, date, idHabit)
+        val _date = DateEntity(null, date, idHabit)
 
         db.dateDao().insert(_date)
     }
     suspend fun insertHabit(habitEntity: HabitEntity) = withContext(Dispatchers.IO + NonCancellable){
-        try {
-            return@withContext db.habitDao().insert(habitEntity)
-        }catch (e: Exception){
-            return@withContext null
-        }
+        db.habitDao().insert(habitEntity)
     }
     fun deleteHabit(habitEntity: HabitEntity){
         db.habitDao().delete(habitEntity)
